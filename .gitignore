@@ -1,0 +1,7 @@
+/build
+.externalNativeBuild
+.cxx
+*.swp
+*.un~
+tags
+*/tags
