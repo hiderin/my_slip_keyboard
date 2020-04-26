@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">my_slip_keyboad</string>
+	<string name="keyboard_name">NewKeyboard</string>
+    <string name="double_key">double key</string>
+
+    <!-- Titles for ImePreference -->
+    <string name="settings_name">LocusKeyboard Settings</string>
+    <string name="language_selection_title">Input languages</string>
+    <string name="select_language">Select input languages</string>
+    <string name="general_category">General</string>
+
+    <string name="preference_key_setting_menu">Software Keyboard</string>
+
+    <string name="preference_key_sound_title"> Sound on Key Press </string>
+    <string name="preference_key_sound_summary"> Enable key click sound. </string>
+
+    <string name="preference_key_vibration_title"> Vibrate on Key Press </string>
+    <string name="preference_key_vibration_summary"> Enable key click vibration. </string>
+
+    <string name="preference_preview_title"> Key Preview </string>
+    <string name="preference_preview_summary"> Enable key preview. </string>
+
+    <string name="preference_auto_caps_title"> Auto Capitalization </string>
+    <string name="preference_auto_caps_summary"> Automatically capitalize the 1st char of a sentence in alphabet mode. </string>
+
+    <string name="locus_regist_edit_label"> 軌道の登録 </string>
+
+    <string name="textview">TextView</string>
 </resources>
