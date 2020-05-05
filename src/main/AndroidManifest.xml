@@ -25,7 +25,7 @@
                 android:resource="@xml/method" />
         </service>
 
-        <activity android:name="ImePreferences" android:label="@string/settings_name">
+        <activity android:name="myPreferenceActivity" android:label="@string/settings_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
             </intent-filter>

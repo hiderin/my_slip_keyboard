@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "28.0.1"
 
     defaultConfig {
         applicationId "com.example.my_slip_keyboad"
@@ -26,9 +26,16 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
+
+	implementation 'androidx.preference:preference:1.0.0'
+
+//	implementation 'com.android.support:preference-v7:25.0.0'
+//	implementation 'com.android.support:preference-v14:25.0.0'
+
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
 //    implementation fileTree(dir: 'libs', include: ['*.jar'])
 //    implementation 'androidx.appcompat:appcompat:1.1.0'
 //	implementation 'androidx.preference:preference:1.0.0'

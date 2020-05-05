@@ -1,3 +1,4 @@
+/*
 package com.example.my_slip_keyboad;
 
 import android.app.Activity;
@@ -38,3 +39,4 @@ public class Settings extends PreferenceActivity {
     }
 
 }
+*/
