@@ -83,7 +83,7 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
         InputConnection ic = getCurrentInputConnection();
         switch (primaryCode) {
             case KeyEvent.KEYCODE_1:
-                ic.commitText("1", 1);
+                ic.commitText( mDoubleKey ? "11" : "1", 1);
                 break;
             case KeyEvent.KEYCODE_2:
                 ic.commitText("2", 1);
@@ -126,9 +126,10 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 
     private void handleCharacter(int primaryCode, int[] keyCodes) {
 
-		if (mDoubleKey) {
-			primaryCode = Character.toUpperCase(primaryCode);
-        }
+//		if (mDoubleKey) {
+//			primaryCode = Character.toUpperCase(primaryCode);
+//        }
+
 		getCurrentInputConnection().commitText(
 				String.valueOf((char) primaryCode), 1);
     }
