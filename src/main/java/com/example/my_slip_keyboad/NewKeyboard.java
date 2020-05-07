@@ -118,6 +118,9 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT));
                 break;
+            case KeyEvent.KEYCODE_SHIFT_LEFT:
+				handleShift();
+                break;
             case KeyEvent.KEYCODE_ENTER:
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
                 break;
@@ -129,13 +132,17 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 
     private void handleCharacter(int primaryCode, int[] keyCodes) {
 
-//		if (mDoubleKey) {
-//			primaryCode = Character.toUpperCase(primaryCode);
-//        }
+		if (keyboardView.isShifted()) {
+			primaryCode = Character.toUpperCase(primaryCode);
+        }
 
 		getCurrentInputConnection().commitText(
 				String.valueOf((char) primaryCode), 1);
     }
+
+	private void handleShift(){
+		keyboardView.setShifted(!keyboardView.isShifted());
+	}
 
     @Override
     public void onPress(int primaryCode) {
