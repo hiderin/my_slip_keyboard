@@ -17,7 +17,7 @@ import androidx.preference.PreferenceFragmentCompat;
  */
 public class myPreferenceFragment extends PreferenceFragmentCompat {
 
-    private OnFragmentInteractionListener mListener;
+    //private OnFragmentInteractionListener mListener;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -39,6 +39,7 @@ public class myPreferenceFragment extends PreferenceFragmentCompat {
     }
 	*/
 
+	/*
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -58,4 +59,6 @@ public class myPreferenceFragment extends PreferenceFragmentCompat {
 
     public interface OnFragmentInteractionListener {
     }
+	*/
+
 }

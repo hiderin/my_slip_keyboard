@@ -9,11 +9,27 @@ import androidx.appcompat.app.AppCompatActivity;
 /**
  * preference activity
  */
+
+/*
 public class myPreferenceActivity extends AppCompatActivity implements myPreferenceFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_view);
+    }
+}
+*/
+
+public class myPreferenceActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.settings_view);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_preference_demo, new myPreferenceFragment())
+                .commit();
     }
 }

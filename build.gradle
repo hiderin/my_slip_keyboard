@@ -28,6 +28,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
 
 	implementation 'androidx.preference:preference:1.0.0'
+//	implementation 'androidx.preference:preference:1.1.0-alpha04'
 
 //	implementation 'com.android.support:preference-v7:25.0.0'
 //	implementation 'com.android.support:preference-v14:25.0.0'
