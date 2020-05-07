@@ -19,6 +19,8 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
     private Keyboard keyboard;
 	//private SharedPreferences prefs;
 
+    private int mCapsLock = 0;
+
 	private boolean mDoubleKey = false;
 
     /** Instance of this service */
@@ -134,15 +136,26 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 
 		if (keyboardView.isShifted()) {
 			primaryCode = Character.toUpperCase(primaryCode);
+			if (mCapsLock==1) {
+				handleShift(false);
+			}
         }
 
 		getCurrentInputConnection().commitText(
 				String.valueOf((char) primaryCode), 1);
     }
 
-	private void handleShift(){
-		keyboardView.setShifted(!keyboardView.isShifted());
+	private void handleShift(boolean swt){
+		if(mCapsLock==2 || !swt){
+			mCapsLock=0;
+			keyboardView.setShifted(false);
+		}else{
+			mCapsLock++;
+			keyboardView.setShifted(true);
+		}
 	}
+
+	private void handleShift(){ handleShift(true);}
 
     @Override
     public void onPress(int primaryCode) {
