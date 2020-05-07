@@ -66,7 +66,7 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 		super.onStartInputView(editorInfo, restarting);
 		//prefs = getSharedPreferences("NewKeyboardData", MODE_MULTI_PROCESS);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		mDoubleKey = prefs.getBoolean("doubleKey", false);
+		mDoubleKey = prefs.getBoolean("doublekey", false);
 
     }
 
