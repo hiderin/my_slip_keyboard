@@ -114,14 +114,14 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
             case KeyEvent.KEYCODE_0:
                 ic.commitText("0", 1);
                 break;
+            case Keyboard.KEYCODE_SHIFT:
+				handleShift();
+                break;
             case Keyboard.KEYCODE_DELETE:
                 ic.deleteSurroundingText(1, 0);
                 break;
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT));
-                break;
-            case KeyEvent.KEYCODE_SHIFT_LEFT:
-				handleShift();
                 break;
             case KeyEvent.KEYCODE_ENTER:
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
