@@ -20,4 +20,5 @@
 
 <resources>
     <dimen name="num12key_height">60dip</dimen>
+    <dimen name="key_height">45dip</dimen>
 </resources>

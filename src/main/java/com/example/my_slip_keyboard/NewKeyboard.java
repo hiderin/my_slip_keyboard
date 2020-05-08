@@ -18,7 +18,7 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
     private KeyboardView kv;
     private Keyboard en_keyboard;
     private Keyboard m12KeyNumKeyboard;
-	//private SharedPreferences prefs;
+    private Keyboard mSymbolsKeyboard ;
 
     private int mCapsLock = 0;
 
@@ -58,6 +58,7 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 		// キーボードxmlのインスタンス化
         en_keyboard = new Keyboard(this, R.xml.keyboard_en);
         m12KeyNumKeyboard = new Keyboard(this, R.xml.keyboard_12key_num);
+        mSymbolsKeyboard = new Keyboard(this, R.xml.symbols);
 
 		// KeyboardViewのセット
         kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard_view, null);
@@ -156,12 +157,23 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
     }
 
 	private void handleShift(boolean swt){
-		if(mCapsLock==2 || !swt){
-			mCapsLock=0;
-			kv.setShifted(false);
-		}else{
-			mCapsLock++;
+		Keyboard current = kv.getKeyboard();
+		if(current==en_keyboard){
+			if(mCapsLock==2 || !swt){
+				mCapsLock=0;
+				kv.setShifted(false);
+			}else{
+				mCapsLock++;
+				kv.setShifted(true);
+			}
+		}
+		else if(current==m12KeyNumKeyboard){
+			kv.setKeyboard(mSymbolsKeyboard);
 			kv.setShifted(true);
+		}
+		else if(current==mSymbolsKeyboard){
+			kv.setKeyboard(m12KeyNumKeyboard);
+			kv.setShifted(false);
 		}
 	}
 
@@ -176,6 +188,8 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 			current = en_keyboard;
 		}
 		kv.setKeyboard(current);
+		kv.setShifted(false);
+		mCapsLock = 0;
 	}
 
     @Override
