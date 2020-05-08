@@ -15,8 +15,9 @@ import android.content.Context;
 
 public class NewKeyboard extends InputMethodService implements KeyboardView.OnKeyboardActionListener {
 
-    private KeyboardView keyboardView;
-    private Keyboard keyboard;
+    private KeyboardView kv;
+    private Keyboard en_keyboard;
+    private Keyboard m12KeyNumKeyboard;
 	//private SharedPreferences prefs;
 
     private int mCapsLock = 0;
@@ -54,12 +55,16 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
     public View onCreateInputView() {
         super.onCreateInputView();
 
-        keyboardView = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard_view, null);
-        keyboard = new Keyboard(this, R.xml.keyboard_en);
-        keyboardView.setKeyboard(keyboard);
-        keyboardView.setOnKeyboardActionListener(this);
-        keyboardView.setPreviewEnabled(false);
-        return keyboardView;
+		// キーボードxmlのインスタンス化
+        en_keyboard = new Keyboard(this, R.xml.keyboard_en);
+        m12KeyNumKeyboard = new Keyboard(this, R.xml.keyboard_12key_num);
+
+		// KeyboardViewのセット
+        kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard_view, null);
+        kv.setKeyboard(en_keyboard);
+        kv.setOnKeyboardActionListener(this);
+        kv.setPreviewEnabled(false);
+        return kv;
     }
 
     //キーボードが表示されるたびに呼ばれるメソッド
@@ -117,6 +122,9 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
             case Keyboard.KEYCODE_SHIFT:
 				handleShift();
                 break;
+            case Keyboard.KEYCODE_MODE_CHANGE:
+				nextKeyboard();
+                break;
             case Keyboard.KEYCODE_DELETE:
                 ic.deleteSurroundingText(1, 0);
                 break;
@@ -134,7 +142,7 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 
     private void handleCharacter(int primaryCode, int[] keyCodes) {
 
-		if (keyboardView.isShifted()) {
+		if (kv.isShifted()) {
 			primaryCode = Character.toUpperCase(primaryCode);
 			if (mCapsLock==1) {
 				handleShift(false);
@@ -148,14 +156,25 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 	private void handleShift(boolean swt){
 		if(mCapsLock==2 || !swt){
 			mCapsLock=0;
-			keyboardView.setShifted(false);
+			kv.setShifted(false);
 		}else{
 			mCapsLock++;
-			keyboardView.setShifted(true);
+			kv.setShifted(true);
 		}
 	}
 
 	private void handleShift(){ handleShift(true);}
+
+	private void nextKeyboard(){
+		Keyboard current = kv.getKeyboard();
+		if(current==en_keyboard){
+			current = m12KeyNumKeyboard;
+		}
+		else{
+			current = en_keyboard;
+		}
+		kv.setKeyboard(current);
+	}
 
     @Override
     public void onPress(int primaryCode) {
