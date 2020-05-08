@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* 
+**
+** Copyright 2008, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License"); 
+** you may not use this file except in compliance with the License. 
+** You may obtain a copy of the License at 
+**
+**     http://www.apache.org/licenses/LICENSE-2.0 
+**
+** Unless required by applicable law or agreed to in writing, software 
+** distributed under the License is distributed on an "AS IS" BASIS, 
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+** See the License for the specific language governing permissions and 
+** limitations under the License.
+*/
+-->
+
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+    android:keyWidth="10%p"
+    android:horizontalGap="0px"
+    android:verticalGap="0px"
+    android:keyHeight="@dimen/key_height"
+    >
+
+    <Row>
+        <Key android:codes="10000" android:keyLabel="教" android:keyEdgeFlags="left"/>
+        <Key android:codes="10100" android:keyLabel="役"/>
+        <Key android:codes="10200" android:keyLabel="導"/>
+        <Key android:codes="10300" android:keyLabel="鐘"/>
+        <Key android:codes="10400" android:keyLabel="木"/>
+        <Key android:codes="10500" android:keyLabel="太"/>
+        <Key android:codes="10600" android:keyLabel="練"/>
+        <Key android:codes="10700" android:keyLabel="家"/>
+        <Key android:codes="10800" android:keyLabel="親"/>
+        <Key android:codes="33,10900" android:keyLabel="!｡" android:keyEdgeFlags="right"/>
+    </Row>
+    
+    <Row>
+        <Key android:codes="11000" android:keyLabel="今" android:keyEdgeFlags="left"/>
+		<Key android:codes="11100" android:keyLabel="帰"/>
+		<Key android:codes="11200" android:keyLabel="迎"/>
+		<Key android:codes="11300" android:keyLabel="行"/>
+		<Key android:codes="11400" android:keyLabel="駐"/>
+		<Key android:codes="11500" android:keyLabel="終"/>
+		<Key android:codes="11600" android:keyLabel="少"/>
+		<Key android:codes="11700" android:keyLabel="遅"/>
+		<Key android:codes="11800" android:keyLabel="感"/>
+        <Key android:codes="11900" android:keyLabel="謝" android:keyEdgeFlags="right"/>
+    </Row>
+    
+    <Row>
+        <Key android:codes="-1" android:keyIcon="@drawable/sym_keyboard_shift"
+                android:keyWidth="15%p" android:isModifier="true"
+                android:isSticky="true" android:keyEdgeFlags="left"/>
+        <Key android:codes="12000" android:keyLabel="疲" />
+        <Key android:codes="12100" android:keyLabel="朝" />
+        <Key android:codes="12200" android:keyLabel="夜" />
+        <Key android:codes="12300" android:keyLabel="了" />
+        <Key android:codes="12400" android:keyLabel="宜" />
+        <Key android:codes="12500" android:keyLabel="願" />
+        <Key android:codes="12600" android:keyLabel="接" />
+        <Key android:codes="-5" android:keyIcon="@drawable/sym_keyboard_delete"
+                android:keyWidth="15%p" android:keyEdgeFlags="right"
+                android:isRepeatable="true"/>
+    </Row>
+    
+    <Row android:rowEdgeFlags="bottom">
+        <Key android:codes="21" android:keyLabel="←" 
+                android:keyWidth="20%p" android:keyEdgeFlags="left" />
+        <Key android:codes="-2" android:keyIcon="@drawable/kc_jp" android:keyWidth="15%p" />
+        <Key android:codes="32" android:keyIcon="@drawable/sym_keyboard_space" android:keyWidth="30%p" 
+                android:isRepeatable="true"/>
+        <Key android:codes="8230" android:keyLabel="…" android:keyWidth="15%p" />
+        <Key android:codes="66" android:keyIcon="@drawable/sym_keyboard_return"
+                android:keyWidth="20%p" android:keyEdgeFlags="right" />
+    </Row>
+</Keyboard>

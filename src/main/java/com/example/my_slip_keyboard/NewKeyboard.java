@@ -19,6 +19,8 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
     private Keyboard en_keyboard;
     private Keyboard m12KeyNumKeyboard;
     private Keyboard mSymbolsKeyboard ;
+    private Keyboard mSymbolsShiftedKeyboard ;
+    private Keyboard mJpnKeyboard;
 
     private int mCapsLock = 0;
 
@@ -59,10 +61,12 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
         en_keyboard = new Keyboard(this, R.xml.keyboard_en);
         m12KeyNumKeyboard = new Keyboard(this, R.xml.keyboard_12key_num);
         mSymbolsKeyboard = new Keyboard(this, R.xml.symbols);
+        mSymbolsShiftedKeyboard = new Keyboard(this, R.xml.symbols_shift);
+        mJpnKeyboard = new Keyboard(this, R.xml.keyboard_jp);
 
 		// KeyboardViewのセット
         kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard_view, null);
-        kv.setKeyboard(en_keyboard);
+        kv.setKeyboard(mJpnKeyboard);
         kv.setOnKeyboardActionListener(this);
         kv.setPreviewEnabled(false);
         return kv;
@@ -144,6 +148,8 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
         }
     }
 
+	// onkeyに伴うメソッド
+
     private void handleCharacter(int primaryCode, int[] keyCodes) {
 		if (kv.isShifted()) {
 			primaryCode = Character.toUpperCase(primaryCode);
@@ -151,7 +157,6 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 				handleShift(false);
 			}
         }
-
 		getCurrentInputConnection().commitText(
 				String.valueOf((char) primaryCode), 1);
     }
@@ -175,6 +180,14 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 			kv.setKeyboard(m12KeyNumKeyboard);
 			kv.setShifted(false);
 		}
+		else if(current==mJpnKeyboard){
+			kv.setKeyboard(mSymbolsShiftedKeyboard);
+			kv.setShifted(true);
+		}
+		else if(current==mSymbolsShiftedKeyboard){
+			kv.setKeyboard(mJpnKeyboard);
+			kv.setShifted(false);
+		}
 	}
 
 	private void handleShift(){ handleShift(true);}
@@ -183,6 +196,9 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 		Keyboard current = kv.getKeyboard();
 		if(current==en_keyboard){
 			current = m12KeyNumKeyboard;
+		}
+		else if(current==m12KeyNumKeyboard){
+			current = mJpnKeyboard;
 		}
 		else{
 			current = en_keyboard;
