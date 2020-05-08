@@ -143,11 +143,17 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
                 break;
             default:
-				handleCharacter(primaryCode, keyCodes);
-                break;
+				if(primaryCode >= 10000){
+					getCurrentInputConnection().commitText(getFixText(primaryCode), 1);
+				}
+				else{
+					handleCharacter(primaryCode, keyCodes);
+					break;
+				}
         }
     }
 
+	//------------------------------------------------------------------------------
 	// onkeyに伴うメソッド
 
     private void handleCharacter(int primaryCode, int[] keyCodes) {
@@ -207,6 +213,41 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 		kv.setShifted(false);
 		mCapsLock = 0;
 	}
+
+	private String getFixText(int ipCode){
+		switch(ipCode){
+			case 10000: return "立正佼成会";
+			case 10100: return "お役";
+			case 10200: return "導師";
+			case 10300: return "鐘";
+			case 10400: return "木鉦";
+			case 10500: return "太鼓";
+			case 10600: return "今日は13:00から教会で練習があります。";
+			case 10700: return "久美ちゃん";
+			case 10800: return "よちゃん";
+			case 10900: return "。";
+			case 11000: return "今";
+			case 11100: return "帰るよ";
+			case 11200: return "迎えに行くね！";
+			case 11300: return "行くね！";
+			case 11400: return "駐車場で待ってるね！";
+			case 11500: return "終るよ";
+			case 11600: return "もう少しかかるよ。";
+			case 11700: return "遅くなる";
+			case 11800: return "ありがとうね";
+			case 11900: return "すみません";
+			case 12000: return "お疲れさま";
+			case 12100: return "おはよう";
+			case 12200: return "こんばんは";
+			case 12300: return "了解";
+			case 12400: return "よろしくね";
+			case 12500: return "お願いします";
+			case 12600: return "です";
+			default: return "";
+		}
+	}
+
+	//------------------------------------------------------------------------------
 
     @Override
     public void onPress(int primaryCode) {
