@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">my_slip_keyboad</string>
+    <string name="app_name">my_slip_keyboard</string>
 	<string name="keyboard_name">NewKeyboard</string>
     <string name="double_key">double key</string>
 

@@ -1,4 +1,4 @@
-package com.example.my_slip_keyboad;
+package com.example.my_slip_keyboard;
 
 import android.os.Bundle;
 import android.preference.PreferenceManager;

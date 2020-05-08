@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.my_slip_keyboad">
+    package="com.example.my_slip_keyboard">
 
 <original-package android:name="com.example.mysecondkeyboard" />
 
