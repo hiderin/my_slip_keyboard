@@ -128,6 +128,9 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
             case Keyboard.KEYCODE_DELETE:
                 ic.deleteSurroundingText(1, 0);
                 break;
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT));
+                break;
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT));
                 break;
@@ -141,7 +144,6 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
     }
 
     private void handleCharacter(int primaryCode, int[] keyCodes) {
-
 		if (kv.isShifted()) {
 			primaryCode = Character.toUpperCase(primaryCode);
 			if (mCapsLock==1) {
