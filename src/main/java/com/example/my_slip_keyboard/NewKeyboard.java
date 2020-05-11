@@ -23,6 +23,9 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
     private Keyboard mJpnKeyboard;
 
     private int mCapsLock = 0;
+	private StringBuilder mComposingTxt;
+	private String mCommitTxt;
+	private Roma2Hira r2h;
 
 	private boolean mDoubleKey = false;
 
@@ -35,6 +38,9 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 	public NewKeyboard(){
 		super();
 		mSelf = this;
+		mComposingTxt = new StringBuilder();
+		mCommitTxt = new String();
+		r2h = new Roma2Hira();
 	}
     public NewKeyboard(Context context) {
         this();
@@ -93,6 +99,8 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
     public void onKey(int primaryCode, int[] keyCodes) {
 
         InputConnection ic = getCurrentInputConnection();
+		Keyboard current = kv.getKeyboard();
+
         switch (primaryCode) {
             case KeyEvent.KEYCODE_1:
                 ic.commitText( mDoubleKey ? "11" : "1", 1);
@@ -145,6 +153,18 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
             default:
 				if(primaryCode >= 10000){
 					getCurrentInputConnection().commitText(getFixText(primaryCode), 1);
+				}
+				else if(current==mJpnKeyboard){
+					mComposingTxt.append(String.valueOf((char) primaryCode));
+					mCommitTxt = r2h.getHiraText(mComposingTxt.toString());
+					if(mCommitTxt.isEmpty()){
+						ic.setComposingText(mComposingTxt, mComposingTxt.length());
+					}
+					else{
+						ic.commitText(mCommitTxt, mCommitTxt.length());
+						mComposingTxt.setLength(0);
+						mCommitTxt = "";
+					}
 				}
 				else{
 					handleCharacter(primaryCode, keyCodes);
