@@ -209,7 +209,7 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 				nextKeyboard();
                 break;
             case Keyboard.KEYCODE_DELETE:
-                ic.deleteSurroundingText(1, 0);
+				handleBackSpace();
                 break;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT));
@@ -218,6 +218,9 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT));
                 break;
             case KeyEvent.KEYCODE_ENTER:
+                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
+                break;
+            case KeyEvent.KEYCODE_SPACE:
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
                 break;
             default:
@@ -263,6 +266,22 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 		getCurrentInputConnection().commitText(
 				String.valueOf((char) primaryCode), 1);
     }
+
+	private void handleSpace(){
+        InputConnection ic = getCurrentInputConnection();
+		ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
+	}
+
+	private void handleBackSpace(){
+        InputConnection ic = getCurrentInputConnection();
+		if(mComposingTxt.length()==0){
+			ic.deleteSurroundingText(1, 0);
+		}
+		else{
+			mComposingTxt.setLength(mComposingTxt.length()-1);
+			ic.setComposingText(mComposingTxt, mComposingTxt.length());
+		}
+	}
 
 	private void handleShift(boolean swt){
 		Keyboard current = kv.getKeyboard();
