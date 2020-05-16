@@ -14,6 +14,12 @@ import android.view.inputmethod.InputConnection;
 import android.content.SharedPreferences;
 import android.content.Context;
 
+import android.content.res.AssetManager;
+import java.io.InputStream;
+import java.io.FileOutputStream;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipEntry;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +49,26 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 	private boolean mCandidateOn;
 
 	private boolean mDoubleKey = false;
+
+	// 初回起動判定
+    public static final int PREFERENCE_INIT = 0;
+    public static final int PREFERENCE_BOOTED = 1;
+
+    //データ保存
+    private void setState(int state) {
+        // SharedPreferences設定を保存
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp.edit().putInt("InitState", state).commit();
+    }
+
+    //データ読み出し
+    private int getState() {
+        // 読み込み
+        int state;
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        state = sp.getInt("InitState", PREFERENCE_INIT);
+        return state;
+    }
 
     /** Instance of this service */
     private static NewKeyboard mSelf = null;
@@ -124,7 +150,47 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
         mComposingTxt.setLength(0);
         updateCandidates();
 
+		// 初回起動時の処理
+        if(PREFERENCE_INIT == getState() ){
+			if(UnzipMydict()){
+                setState(PREFERENCE_BOOTED);
+			}
+        }
     }
+
+	private boolean UnzipMydict(){
+		String path = null;
+		try {
+			AssetManager    am  = getResources().getAssets();
+			InputStream     is  = am.open("mydict.zip", AssetManager.ACCESS_STREAMING);
+			ZipInputStream  zis = new ZipInputStream(is);
+			ZipEntry        ze  = zis.getNextEntry();
+
+			if (ze != null) {
+
+				//// databasesフォルダ作成用ダミー
+				//DummyRegister dreg = new DummyRegister(this);
+				//dreg.CreateDatabase();
+
+				path = getDatabasePath("mydict.db").toString();
+				FileOutputStream fos = new FileOutputStream(path, false);
+				byte[] buf = new byte[1024];
+				int size = 0;
+
+				while ((size = zis.read(buf, 0, buf.length)) > -1) {
+					fos.write(buf, 0, size);
+				}
+				fos.close();
+				zis.closeEntry();
+			}
+			zis.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
 
     /**
      * This tells us about completions that the editor has determined based
