@@ -34,7 +34,8 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 
 	// 変数
     private int mCapsLock = 0;
-	private StringBuilder mComposingTxt;
+	//private StringBuilder mComposingTxt;
+	private ComposingBuilder mComposingTxt;
 	private String mCommitTxt;
 	private Roma2Hira r2h;
     private String mTemporaryText;
@@ -52,7 +53,7 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 	public NewKeyboard(){
 		super();
 		mSelf = this;
-		mComposingTxt = new StringBuilder();
+		mComposingTxt = new ComposingBuilder(this);
 		mCommitTxt = "";
 		r2h = new Roma2Hira();
 	}
@@ -238,7 +239,7 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 					mComposingTxt.append(String.valueOf((char) primaryCode));
 					mCommitTxt = r2h.getHiraText(mComposingTxt.toString());
 					if(mCommitTxt.isEmpty()){
-						ic.setComposingText(mComposingTxt, mComposingTxt.length());
+						ic.setComposingText(mComposingTxt.me(), mComposingTxt.length());
 					}
 					else{
 						ic.commitText(mCommitTxt, mCommitTxt.length());
@@ -279,7 +280,7 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 		}
 		else{
 			mComposingTxt.setLength(mComposingTxt.length()-1);
-			ic.setComposingText(mComposingTxt, mComposingTxt.length());
+			ic.setComposingText(mComposingTxt.me(), mComposingTxt.length());
 		}
 	}
 
@@ -513,6 +514,7 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 				mCandidateOn = true;
             } else {
                 setSuggestions(null, false, false);
+
             }
         }
     }
@@ -539,7 +541,8 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 		} else if(mCandidateOn){
 			InputConnection ic = getCurrentInputConnection();
 //			int sp = getComposingStartPoint();
-//			ic.setSelection(sp,sp+mComposing.length());
+			int sp = 0;
+			ic.setSelection(sp,sp+mComposingTxt.length());
 			ic.commitText(mCandidateList.get(index),1);
 //			mComposing.RebuildForIndex(index);
 //			int length = mComposing.length();
@@ -557,5 +560,6 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
             // we will just commit the current text.
 //            commitTyped(getCurrentInputConnection(),null);
         }
+		updateCandidates();
     }
 }
