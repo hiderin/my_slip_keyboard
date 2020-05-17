@@ -1,16 +1,20 @@
 package com.example.my_slip_keyboard;
 
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
-import android.view.KeyEvent;
-import android.view.View;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.ExtractedText;
+import android.view.inputmethod.ExtractedTextRequest;
+
+import android.view.KeyEvent;
+import android.view.View;
+
+import android.preference.PreferenceManager;
 import android.content.SharedPreferences;
 import android.content.Context;
 
@@ -47,6 +51,8 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
     private String mTemporaryText;
 	private ArrayList<String> mCandidateList;
 	private boolean mCandidateOn;
+	private ExtractedTextRequest mExtractedTextRequest;
+	private ExtractedText mExtractedText;
 
 	private boolean mDoubleKey = false;
 
@@ -93,6 +99,12 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
     @Override
     public void onCreate() {
         super.onCreate();
+		mExtractedText = new ExtractedText();
+		mExtractedTextRequest = new ExtractedTextRequest();
+		mExtractedTextRequest.token = 0;
+		mExtractedTextRequest.flags = InputConnection.GET_TEXT_WITH_STYLES;
+		mExtractedTextRequest.hintMaxLines = 10;
+		mExtractedTextRequest.hintMaxChars = 10000;
     }
 
 	public static NewKeyboard getInstance(){
@@ -236,7 +248,6 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
     public void onKey(int primaryCode, int[] keyCodes) {
 
         InputConnection ic = getCurrentInputConnection();
-		Keyboard current = kv.getKeyboard();
 
         switch (primaryCode) {
             case KeyEvent.KEYCODE_1:
@@ -301,18 +312,6 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 						mCandidateOn = true;
 					}
 				}
-				else if(current==mJpnKeyboard){
-					mComposingTxt.append(String.valueOf((char) primaryCode));
-					mCommitTxt = r2h.getHiraText(mComposingTxt.toString());
-					if(mCommitTxt.isEmpty()){
-						ic.setComposingText(mComposingTxt.me(), mComposingTxt.length());
-					}
-					else{
-						ic.commitText(mCommitTxt, mCommitTxt.length());
-						mComposingTxt.setLength(0);
-						mCommitTxt = "";
-					}
-				}
 				else{
 					handleCharacter(primaryCode, keyCodes);
 					break;
@@ -324,14 +323,33 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 	// onkeyに伴うメソッド
 
     private void handleCharacter(int primaryCode, int[] keyCodes) {
-		if (kv.isShifted()) {
-			primaryCode = Character.toUpperCase(primaryCode);
-			if (mCapsLock==1) {
-				handleShift(false);
+        InputConnection ic = getCurrentInputConnection();
+		Keyboard current = kv.getKeyboard();
+		if(current==mJpnKeyboard){
+			mComposingTxt.append((char)primaryCode);
+			mCommitTxt = r2h.getHiraText(mComposingTxt.toString());
+			if(mCommitTxt.isEmpty()){
+				ic.setComposingText(mComposingTxt.hira(), mComposingTxt.length());
+				mCandidateList=mComposingTxt.getCandidateList();
+				updateCandidates(mCandidateList);
+				mCandidateOn = true;
 			}
-        }
-		getCurrentInputConnection().commitText(
-				String.valueOf((char) primaryCode), 1);
+			else{
+				ic.commitText(mCommitTxt, mCommitTxt.length());
+				mComposingTxt.setLength(0);
+				mCommitTxt = "";
+			}
+		}
+		else{
+			if (kv.isShifted()) {
+				primaryCode = Character.toUpperCase(primaryCode);
+				if (mCapsLock==1) {
+					handleShift(false);
+				}
+			}
+			getCurrentInputConnection().commitText(
+					String.valueOf((char) primaryCode), 1);
+		}
     }
 
 	private void handleSpace(){
@@ -573,9 +591,8 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 
     private void updateCandidates() {
         if (!mCompletionOn) {
-            //if (mComposingTxt.length() > 0) {
-            if (mTemporaryText.length() > 0) {
-//				mCandidateList=mComposing.getCandidateList();
+            if (mTemporaryText.length() > 0 || mComposingTxt.length() > 0 ) {
+				mCandidateList=mComposingTxt.getCandidateList();
                 setSuggestions(mCandidateList, true, true);
 				mCandidateOn = true;
             } else {
@@ -584,6 +601,21 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
             }
         }
     }
+
+	private int getComposingStartPoint(){
+		InputConnection ic = getCurrentInputConnection();
+		mExtractedText = ic.getExtractedText(
+				mExtractedTextRequest,
+				InputConnection.GET_EXTRACTED_TEXT_MONITOR);
+		int sp = mExtractedText.selectionStart;
+		int ep = mExtractedText.selectionEnd;
+		int len = mComposingTxt.length();
+		if(sp==ep && sp>=len){
+			return sp - len;
+		}
+		return sp;
+	}
+
     public void setSuggestions(List<String> suggestions, boolean completions,
             boolean typedWordValid) {
         if (suggestions != null && suggestions.size() > 0) {
@@ -593,6 +625,28 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
         }
         if (mCandidateView != null) {
             mCandidateView.setSuggestions(suggestions, completions, typedWordValid);
+        }
+    }
+
+
+    /**
+     * Helper function to commit any text being composed in to the editor.
+     */
+    private void commitTyped(InputConnection inputConnection, StringBuilder tComposing) {
+		if(tComposing==null) tComposing = mComposingTxt.hira();
+        if (tComposing.length() > 0) {
+            inputConnection.commitText(tComposing, tComposing.length());
+            tComposing.setLength(0);
+            updateCandidates();
+        }
+    }
+
+    private void commitTyped(InputConnection inputConnection) {
+		int len = mComposingTxt.length();
+        if (len > 0) {
+            inputConnection.commitText(mComposingTxt.me(),len);
+            mComposingTxt.setLength(0);
+            updateCandidates();
         }
     }
 
@@ -606,17 +660,16 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
             }
 		} else if(mCandidateOn){
 			InputConnection ic = getCurrentInputConnection();
-//			int sp = getComposingStartPoint();
-			int sp = 0;
+			int sp = getComposingStartPoint();
 			ic.setSelection(sp,sp+mComposingTxt.length());
 			ic.commitText(mCandidateList.get(index),1);
-//			mComposing.RebuildForIndex(index);
-//			int length = mComposing.length();
-//			if (length > 0) {
-//				ic.setComposingText(mComposing.hira(), 1);
-//			} else if (length > 0) {
-//				ic.commitText("", 0);
-//			} 
+			mComposingTxt.RebuildForIndex(index);
+			int length = mComposingTxt.length();
+			if (length > 0) {
+				ic.setComposingText(mComposingTxt.hira(), 1);
+			} else if (length > 0) {
+				ic.commitText("", 0);
+			} 
 			mCandidateOn =false;
 			mTemporaryText = "";
         } else if (mComposingTxt.length() > 0) {
@@ -624,7 +677,7 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
             // If we were generating candidate suggestions for the current
             // text, we would commit one of them here.  But for this sample,
             // we will just commit the current text.
-//            commitTyped(getCurrentInputConnection(),null);
+            commitTyped(getCurrentInputConnection(),null);
         }
 		updateCandidates();
     }
