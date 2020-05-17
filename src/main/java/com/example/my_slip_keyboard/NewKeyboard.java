@@ -288,7 +288,7 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
                 break;
             case KeyEvent.KEYCODE_SPACE:
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
+                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SPACE));
                 break;
             default:
 				if(primaryCode >= 10000){
