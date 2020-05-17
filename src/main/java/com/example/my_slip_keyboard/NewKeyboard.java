@@ -290,10 +290,28 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 				handleBackSpace();
                 break;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT));
+				// 方向キーRigth
+				{int len = mComposingTxt.length();
+				if(len>0){
+					int sp = getComposingStartPoint();
+					int csr = mComposingTxt.CursorRight();
+					updateCandidates();
+					ic.setSelection(sp,sp+csr);
+				}else{
+					ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT));
+				}}
                 break;
             case KeyEvent.KEYCODE_DPAD_LEFT:
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT));
+				// 方向キーLeft
+				{int len = mComposingTxt.length();
+				if(len>0){
+					int sp = getComposingStartPoint();
+					int csr = mComposingTxt.CursorLeft();
+					updateCandidates();
+					ic.setSelection(sp,sp+csr);
+				}else{
+					ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT));
+				}}
                 break;
             case KeyEvent.KEYCODE_ENTER:
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
