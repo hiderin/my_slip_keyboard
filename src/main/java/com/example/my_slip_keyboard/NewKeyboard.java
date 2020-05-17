@@ -377,13 +377,18 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 
 	private void handleBackSpace(){
         InputConnection ic = getCurrentInputConnection();
-		if(mComposingTxt.length()==0){
+        final int length = mComposingTxt.length();
+        if (length > 1) {
+			mComposingTxt.backspace();
+            getCurrentInputConnection().setComposingText(mComposingTxt.hira(), 1);
+            updateCandidates();
+        } else if (length > 0) {
+            mComposingTxt.setLength(0);
+            getCurrentInputConnection().commitText("", 0);
+            updateCandidates();
+        } else {
 			ic.deleteSurroundingText(1, 0);
-		}
-		else{
-			mComposingTxt.setLength(mComposingTxt.length()-1);
-			ic.setComposingText(mComposingTxt.me(), mComposingTxt.length());
-		}
+        }
 	}
 
 	private void handleShift(boolean swt){
