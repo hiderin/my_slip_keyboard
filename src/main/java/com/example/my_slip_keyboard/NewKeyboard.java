@@ -314,6 +314,7 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 				}}
                 break;
             case KeyEvent.KEYCODE_ENTER:
+            	handleEnter();
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
                 break;
             case KeyEvent.KEYCODE_SPACE:
@@ -436,6 +437,15 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
 		kv.setKeyboard(current);
 		kv.setShifted(false);
 		mCapsLock = 0;
+	}
+
+	private void handleEnter(){
+		if(mComposingTxt.length()>0){
+			commitTyped(getCurrentInputConnection());
+		}else{
+        	InputConnection ic = getCurrentInputConnection();
+			ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
+		}
 	}
 
 	//------------------------------------------------------------------------------
