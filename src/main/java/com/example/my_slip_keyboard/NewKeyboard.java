@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.KeyboardView;
+//import android.inputmethodservice.KeyboardView;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
@@ -27,14 +27,14 @@ import java.util.zip.ZipEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewKeyboard extends InputMethodService implements KeyboardView.OnKeyboardActionListener {
+public abstract class NewKeyboard extends InputMethodService implements myKeyboardView.OnKeyboardActionListener {
 
     private CompletionInfo[] mCompletions;
     private boolean mCompletionOn;
 
 	// View
     private CandidateView mCandidateView;
-    private KeyboardView kv;
+    private myKeyboardView kv;
 	// keyboard
     private Keyboard en_keyboard;
     private Keyboard m12KeyNumKeyboard;
@@ -124,7 +124,7 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
         mJpnKeyboard = new Keyboard(this, R.xml.keyboard_jp);
 
 		// KeyboardViewのセット
-        kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard_view, null);
+        kv = (myKeyboardView) getLayoutInflater().inflate(R.layout.keyboard_view, null);
         kv.setKeyboard(mJpnKeyboard);
         kv.setOnKeyboardActionListener(this);
         kv.setPreviewEnabled(false);
