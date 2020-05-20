@@ -655,7 +655,9 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
             setCandidatesViewShown(true);
         } else if (isExtractViewShown()) {
             setCandidatesViewShown(true);
-        }
+        } else if (suggestions==null){
+			setCandidatesViewShown(false);
+		}
         if (mCandidateView != null) {
             mCandidateView.setSuggestions(suggestions, completions, typedWordValid);
         }
