@@ -27,6 +27,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+//import android.inputmethodservice.Keyboard;
 //import android.inputmethodservice.Keyboard.Key;
 import android.media.AudioManager;
 import android.os.Handler;

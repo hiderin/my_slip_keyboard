@@ -114,7 +114,7 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
     //初回だけ呼ばれる
     @Override
     public View onCreateInputView() {
-        super.onCreateInputView();
+        //super.onCreateInputView();
 
 		// キーボードxmlのインスタンス化
         en_keyboard = new Keyboard(this, R.xml.keyboard_en);
