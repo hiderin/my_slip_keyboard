@@ -3,8 +3,8 @@ package com.example.my_slip_keyboard;
 import android.os.Bundle;
 import android.util.Log;
 import android.inputmethodservice.InputMethodService;
-import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.KeyboardView;
+//import android.inputmethodservice.Keyboard;
+//import android.inputmethodservice.KeyboardView;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
@@ -27,20 +27,20 @@ import java.util.zip.ZipEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewKeyboard extends InputMethodService implements KeyboardView.OnKeyboardActionListener {
+public abstract class NewKeyboard extends InputMethodService implements KeyboardView.OnKeyboardActionListener {
 
     private CompletionInfo[] mCompletions;
     private boolean mCompletionOn;
 
 	// View
     private CandidateView mCandidateView;
-    private KeyboardView kv;
+    private LatinKeyboardView kv;
 	// keyboard
-    private Keyboard en_keyboard;
-    private Keyboard m12KeyNumKeyboard;
-    private Keyboard mSymbolsKeyboard ;
-    private Keyboard mSymbolsShiftedKeyboard ;
-    private Keyboard mJpnKeyboard;
+    private LatinKeyboard en_keyboard;
+    private LatinKeyboard m12KeyNumKeyboard;
+    private LatinKeyboard mSymbolsKeyboard ;
+    private LatinKeyboard mSymbolsShiftedKeyboard ;
+    private LatinKeyboard mJpnKeyboard;
 
 	// 変数
     private int mCapsLock = 0;
@@ -117,14 +117,14 @@ public class NewKeyboard extends InputMethodService implements KeyboardView.OnKe
         super.onCreateInputView();
 
 		// キーボードxmlのインスタンス化
-        en_keyboard = new Keyboard(this, R.xml.keyboard_en);
-        m12KeyNumKeyboard = new Keyboard(this, R.xml.keyboard_12key_num);
-        mSymbolsKeyboard = new Keyboard(this, R.xml.symbols);
-        mSymbolsShiftedKeyboard = new Keyboard(this, R.xml.symbols_shift);
-        mJpnKeyboard = new Keyboard(this, R.xml.keyboard_jp);
+        en_keyboard = new LatinKeyboard(this, R.xml.keyboard_en);
+        m12KeyNumKeyboard = new LatinKeyboard(this, R.xml.keyboard_12key_num);
+        mSymbolsKeyboard = new LatinKeyboard(this, R.xml.symbols);
+        mSymbolsShiftedKeyboard = new LatinKeyboard(this, R.xml.symbols_shift);
+        mJpnKeyboard = new LatinKeyboard(this, R.xml.keyboard_jp);
 
 		// KeyboardViewのセット
-        kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard_view, null);
+        kv = (LatinKeyboardView) getLayoutInflater().inflate(R.layout.keyboard_view, null);
         kv.setKeyboard(mJpnKeyboard);
         kv.setOnKeyboardActionListener(this);
         kv.setPreviewEnabled(false);
