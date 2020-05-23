@@ -50,6 +50,7 @@ public class myKeyboardView extends KeyboardView implements KeyboardView.OnKeybo
 
     public void setOnKeyboardActionListener(OnKeyboardActionListener listener) {
         mKeyboardActionListener = listener;
+		super.setOnKeyboardActionListener(this);
     }
 
 	//OnKeyboardActionListenerのOverride
