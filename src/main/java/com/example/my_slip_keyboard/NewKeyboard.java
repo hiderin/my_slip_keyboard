@@ -54,6 +54,9 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 	private ExtractedTextRequest mExtractedTextRequest;
 	private ExtractedText mExtractedText;
 
+	private int mOnKeyThrough=0;
+	private int mOldKeyCode;
+
 	private boolean mDoubleKey = false;
 
 	// 初回起動判定
@@ -331,10 +334,11 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 					}
 				}
 				else{
-					handleCharacter(primaryCode, keyCodes);
+					if(mOnKeyThrough == 0) handleCharacter(primaryCode, keyCodes);
 					break;
 				}
         }
+		mOnKeyThrough = 0;
     }
 
 	//------------------------------------------------------------------------------
@@ -585,6 +589,18 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 
     @Override
     public void onKeyThrough(int primaryCode) {
+		if(isJpKey(primaryCode)){
+			if(mOnKeyThrough>0 && mComposingTxt.length()>mOnKeyThrough){
+				InputConnection ic = getCurrentInputConnection();
+				//commitTyped(ic,mCommitTxt);
+				ic.commitText(mCommitTxt, mCommitTxt.length());
+				mComposingTxt.setLength(0);
+				handleCharacter(mOldKeyCode,null);
+			}
+			mOnKeyThrough++;
+			handleCharacter(primaryCode, null);
+			mOldKeyCode = primaryCode;
+		}
     }
 
     @Override
@@ -719,4 +735,11 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
         }
 		updateCandidates();
     }
+	//------------------------------------------------------------------------------
+
+	private boolean isJpKey(int primaryCode){
+        return (primaryCode >= 97 && primaryCode <= 122) ||
+                (primaryCode >= 44 && primaryCode <= 46);
+    }
+
 }
