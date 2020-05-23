@@ -27,7 +27,7 @@ import java.util.zip.ZipEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class NewKeyboard extends InputMethodService implements myKeyboardView.OnKeyboardActionListener {
+public class NewKeyboard extends InputMethodService implements myKeyboardView.OnKeyboardActionListener {
 
     private CompletionInfo[] mCompletions;
     private boolean mCompletionOn;

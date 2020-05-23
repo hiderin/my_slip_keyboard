@@ -12,25 +12,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class myKeyboardView extends KeyboardView {
+public class myKeyboardView extends KeyboardView implements KeyboardView.OnKeyboardActionListener{
 
-    private static final int NOT_A_KEY = -1;
-	private int mOldThroughKey=NOT_A_KEY;
-    private OnKeyboardActionListener mKeyboardActionListener;
-    private Key[] mKeys;
-
-    /**
-     * Listener for virtual keyboard events.
-     */
     public interface OnKeyboardActionListener {
-        void onKeyThrough(int primaryCode);
-
-        //キーを押した時
-        void onKey(int primaryCode, int[] keyCodes);
 
         void onPress(int primaryCode);
 
         void onRelease(int primaryCode);
+
+        void onKey(int primaryCode, int[] keyCodes);
 
         void onText(CharSequence text);
 
@@ -43,41 +33,64 @@ public class myKeyboardView extends KeyboardView {
         void swipeUp();
     }
 
+    private OnKeyboardActionListener mKeyboardActionListener;
+
 	//コンストラクタ
     public myKeyboardView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-    public myKeyboardView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+
+    public myKeyboardView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
     }
 
-	@Override
-    public void setKeyboard(Keyboard keyboard) {
-		super.setKeyboard(keyboard);
-        List<Key> keys = keyboard.getKeys();
-        mKeys = keys.toArray(new Key[keys.size()]);
-    }
+//    public myKeyboardView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+//        super(context, attrs, defStyleAttr, defStyleRes);
+//	}
 
     public void setOnKeyboardActionListener(OnKeyboardActionListener listener) {
-		super.setOnKeyboardActionListener((KeyboardView.OnKeyboardActionListener) listener);
         mKeyboardActionListener = listener;
     }
 
-//	//イベント
-//	@Override
-//    void onKey(int primaryCode, int[] keyCodes){
-//		super.onKey(primaryCode, keyCodes);
-//	}
+	//OnKeyboardActionListenerのOverride
+    @Override
+	public void onPress(int primaryCode){
+		mKeyboardActionListener.onPress(primaryCode);
+	}
 
-	private void send_ThroughKey(int index){
-        if (index < mKeys.length) {
-            final Key key = mKeys[index];
-			int code = key.codes[0];
-			if(mOldThroughKey!=code && code!=NOT_A_KEY){
-				mKeyboardActionListener.onKeyThrough(code);
-			}
-			mOldThroughKey = code;
-		}
+    @Override
+	public void onRelease(int primaryCode){
+		mKeyboardActionListener.onRelease(primaryCode);
+	}
+
+    @Override
+	public void onKey(int primaryCode, int[] keyCodes){
+		mKeyboardActionListener.onKey(primaryCode, keyCodes);
+	}
+
+    @Override
+	public void onText(CharSequence text){
+		mKeyboardActionListener.onText(text);
+	}
+
+    @Override
+	public void swipeLeft(){
+		mKeyboardActionListener.swipeLeft();
+	}
+
+    @Override
+	public void swipeRight(){
+		mKeyboardActionListener.swipeRight();
+	}
+
+    @Override
+	public void swipeDown(){
+		mKeyboardActionListener.swipeDown();
+	}
+
+    @Override
+	public void swipeUp(){
+		mKeyboardActionListener.swipeUp();
 	}
 
 }
