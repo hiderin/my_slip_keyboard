@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.view.MotionEvent;
+
 public class myKeyboardView extends KeyboardView implements KeyboardView.OnKeyboardActionListener{
 
     public interface OnKeyboardActionListener {
@@ -21,6 +23,8 @@ public class myKeyboardView extends KeyboardView implements KeyboardView.OnKeybo
         void onRelease(int primaryCode);
 
         void onKey(int primaryCode, int[] keyCodes);
+
+        void onKeyThrough(int primaryCode);
 
         void onText(CharSequence text);
 
@@ -34,6 +38,19 @@ public class myKeyboardView extends KeyboardView implements KeyboardView.OnKeybo
     }
 
     private OnKeyboardActionListener mKeyboardActionListener;
+
+	private int mPaddingTop;
+	private int mPaddingBottom;
+	private int mPaddingLeft;
+	private int mPaddingRight;
+
+    private int mVerticalCorrection;
+    private int mProximityThreshold;
+
+    private Keyboard mKeyboard;
+    private Key[] mKeys;
+    private static final int NOT_A_KEY = -1;
+	private int mOldThroughKey=NOT_A_KEY;
 
 	//コンストラクタ
     public myKeyboardView(Context context, AttributeSet attrs) {
@@ -92,6 +109,78 @@ public class myKeyboardView extends KeyboardView implements KeyboardView.OnKeybo
     @Override
 	public void swipeUp(){
 		mKeyboardActionListener.swipeUp();
+	}
+
+    @Override
+    public boolean onTouchEvent(MotionEvent me) {
+		onModifiedTouchEvent(me);
+		return super.onTouchEvent(me);
+    }
+
+    public void setKeyboard(Keyboard keyboard) {
+		super.setKeyboard(keyboard);
+        mKeyboard = keyboard;
+        List<Key> keys = mKeyboard.getKeys();
+        mKeys = keys.toArray(new Key[keys.size()]);
+    }
+
+    private int getKeyIndices(int x, int y) {
+        final Key[] keys = mKeys;
+        int primaryIndex = NOT_A_KEY;
+        int closestKey = NOT_A_KEY;
+        int closestKeyDist = mProximityThreshold + 1;
+        int [] nearestKeyIndices = mKeyboard.getNearestKeys(x, y);
+        final int keyCount = nearestKeyIndices.length;
+        for (int i = 0; i < keyCount; i++) {
+            final Key key = keys[nearestKeyIndices[i]];
+            int dist = 0;
+            boolean isInside = key.isInside(x,y);
+            if (isInside) {
+                primaryIndex = nearestKeyIndices[i];
+            }
+
+            if ((((dist = key.squaredDistanceFrom(x, y)) < mProximityThreshold)
+                    || isInside)
+                    && key.codes[0] > 32) {
+                // Find insertion point
+                final int nCodes = key.codes.length;
+                if (dist < closestKeyDist) {
+                    closestKeyDist = dist;
+                    closestKey = nearestKeyIndices[i];
+                }
+            }
+        }
+        if (primaryIndex == NOT_A_KEY) {
+            primaryIndex = closestKey;
+        }
+        return primaryIndex;
+    }
+
+    private void onModifiedTouchEvent(MotionEvent me) {
+        int touchX = (int) me.getX() - mPaddingLeft;
+        int touchY = (int) me.getY() - mPaddingTop;
+        if (touchY >= -mVerticalCorrection)
+            touchY += mVerticalCorrection;
+        final int action = me.getAction();
+        final long eventTime = me.getEventTime();
+        int keyIndex = getKeyIndices(touchX, touchY);
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_MOVE:
+				send_ThroughKey(keyIndex);
+                break;
+        }
+    }
+
+	private void send_ThroughKey(int index){
+        if (index != NOT_A_KEY && index < mKeys.length) {
+            final Key key = mKeys[index];
+			int code = key.codes[0];
+			if(mOldThroughKey!=code && code!=NOT_A_KEY){
+				mKeyboardActionListener.onKeyThrough(code);
+			}
+			mOldThroughKey = code;
+		}
 	}
 
 }

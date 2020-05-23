@@ -584,6 +584,10 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
     }
 
     @Override
+    public void onKeyThrough(int primaryCode) {
+    }
+
+    @Override
     public void onRelease(int primaryCode) {
     }
 
