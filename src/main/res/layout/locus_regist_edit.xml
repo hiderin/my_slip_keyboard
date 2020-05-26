@@ -11,32 +11,69 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dip"
-        android:text="ひらがな"
+        android:text="軌道の登録 char"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-   <Button android:id="@+id/cancelButton"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_centerVertical="true"
-       android:layout_alignParentLeft="true"
-       android:text="キャンセル"
-       android:minWidth="120dip"
-       android:minHeight="48dip"/>
-
-   <Button android:id="@+id/registButton"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_centerVertical="true"
-       android:layout_alignParentRight="true"
-       android:text="登録"
-       android:minWidth="120dip"
-       android:minHeight="48dip"/>
-
-		<!--
-    <EditText android:id="@+id/LRegEditHira"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLength="20"/>
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:minWidth="48dip"
+            android:minHeight="120dip"
+            android:text="＜" />
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:orientation="vertical">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="20sp"
+        		android:layout_marginLeft="10dip"
+				android:text="1"
+				android:textAppearance="?android:attr/textAppearanceLarge" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="あ"
+				android:textSize="100sp"
+				android:textAppearance="?android:attr/textAppearanceLarge"
+				android:layout_gravity="center_horizontal"
+				android:gravity="center_horizontal"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="36sp"
+				android:text="a"
+				android:textAppearance="?android:attr/textAppearanceLarge"
+				android:layout_gravity="center_horizontal"
+				android:gravity="center_horizontal"/>
+
+		</LinearLayout>
+
+        <Button
+            android:id="@+id/registButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:minWidth="48dip"
+            android:minHeight="120dip"
+			android:layout_gravity="right"
+            android:text="＞" />
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
@@ -44,33 +81,36 @@
         android:layout_marginTop="5dip"
         android:text="軌道"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
-    <EditText android:id="@+id/LRegEditLocus"
+
+    <EditText android:id="@+id/LRegEditHira"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLength="20"/>
+        android:maxLength="200"/>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/listPreferredItemHeight"
-        android:layout_marginTop="1dip"
-        android:background="@android:drawable/bottom_bar">
-        <Button android:id="@+id/cancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:text="キャンセル"
-            android:minWidth="120dip"
-            android:minHeight="48dip"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <Button android:id="@+id/registButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:text="登録"
-            android:minWidth="120dip"
-            android:minHeight="48dip"/>
-    </RelativeLayout>
-	-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="軌道リスト"
+		android:layout_weight="1"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="1個"
+		android:layout_gravity="right"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+	</LinearLayout>
+
+	<ListView
+		android:id="@+id/listView"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" />
+
 </LinearLayout>
