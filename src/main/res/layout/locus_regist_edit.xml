@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  軌道登録用の設定画面のレイアウト
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dip"
+        android:text="ひらがな"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+   <Button android:id="@+id/cancelButton"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_centerVertical="true"
+       android:layout_alignParentLeft="true"
+       android:text="キャンセル"
+       android:minWidth="120dip"
+       android:minHeight="48dip"/>
+
+   <Button android:id="@+id/registButton"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_centerVertical="true"
+       android:layout_alignParentRight="true"
+       android:text="登録"
+       android:minWidth="120dip"
+       android:minHeight="48dip"/>
+
+		<!--
+    <EditText android:id="@+id/LRegEditHira"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLength="20"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dip"
+        android:text="軌道"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+    <EditText android:id="@+id/LRegEditLocus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLength="20"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_marginTop="1dip"
+        android:background="@android:drawable/bottom_bar">
+        <Button android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:text="キャンセル"
+            android:minWidth="120dip"
+            android:minHeight="48dip"/>
+
+        <Button android:id="@+id/registButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="登録"
+            android:minWidth="120dip"
+            android:minHeight="48dip"/>
+    </RelativeLayout>
+	-->
+</LinearLayout>

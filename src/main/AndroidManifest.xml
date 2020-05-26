@@ -31,5 +31,8 @@
             </intent-filter>
         </activity>
 
+		<activity android:name="LocusRegistEdit"
+		   	android:label="@string/locus_regist_edit_label" />
+
     </application>
 </manifest>
