@@ -26,4 +26,14 @@
     <string name="locus_regist_edit_label"> 軌道の登録 </string>
 
     <string name="textview">TextView</string>
+    <string name="char_title">軌道の登録 char</string>
+    <string name="input_title">軌道</string>
+    <string name="prev_txt">＜</string>
+    <string name="locus_list">軌道リスト</string>
+    <string name="list_num">1個</string>
+    <string name="char_num">1</string>
+    <string name="char_alpha">a</string>
+    <string name="char_hira">あ</string>
+    <string name="next_txt">＞</string>
+    <string name="locus_text">locus_text</string>
 </resources>
