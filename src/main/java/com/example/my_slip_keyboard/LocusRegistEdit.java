@@ -3,7 +3,6 @@
 package com.example.my_slip_keyboard;
 
 import android.app.Activity;
-//import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,8 +12,6 @@ import android.widget.EditText;
 public class LocusRegistEdit extends Activity{
 
     /** Widgets which constitute this screen of activity */
-//    private EditText mEditTextHira;
-//    private EditText mEditTextLocus;
     private Button mRegistBtn;
     private Button mCancelBtn;
 
@@ -25,22 +22,13 @@ public class LocusRegistEdit extends Activity{
         setContentView(R.layout.locus_regist_edit);
 
         /* get widgets */
-//		mEditTextHira = (EditText)findViewById(R.id.LRegEditHira);
-//		mEditTextLocus = (EditText)findViewById(R.id.LRegEditLocus);
         mRegistBtn = (Button)findViewById(R.id.registButton);
         mCancelBtn = (Button)findViewById(R.id.cancelButton);
-
-        /* set the listener */
-//        mRegistBtn.setOnClickListener(this);
-//        mCancelBtn.setOnClickListener(this);
 
     }
 
     /** @see android.view.View.OnClickListener */
     public void onClick(View v) {
-
-//        mEntryButton.setEnabled(false);
-//        mCancelButton.setEnabled(false);
 
         switch (v.getId()) {
             case R.id.registButton:
@@ -52,11 +40,6 @@ public class LocusRegistEdit extends Activity{
                 /* cancel the edit */
                 CancelBtnClick();
                 break;
-
-//            default:
-//                Log.e("OpenWnn", "onClick: Get Invalid ButtonID. ID=" + v.getId());
-//                finish();
-//                return;
         }
     }
         private void RegistBtnClick() {
