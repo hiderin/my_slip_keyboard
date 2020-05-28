@@ -1,13 +1,26 @@
 <androidx.preference.PreferenceScreen
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+	xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <PreferenceCategory android:title="テスト セッティング">
 
     <SwitchPreferenceCompat
-        app:key="doublekey"
-        app:title="Enable message notifications"/>
+        android:key="doublekey"
+        android:title="Enable message notifications"/>
 
     <Preference
-        app:key="feedback"
-        app:title="Send feedback"
-        app:summary="Report technical issues or suggest new features"/>
+        android:key="feedback"
+        android:summary="Report technical issues or suggest new features"
+        android:title="Send feedback" />
+
+    <PreferenceScreen android:key="regist_locus"
+		      android:title="軌道の登録"
+			  android:summary="入力する軌道を登録出来ます"
+		      android:persistent="false">
+	<intent android:action="android.intent.action.VIEW"
+	    android:targetPackage="com.example.my_slip_keyboard"
+	    android:targetClass="com.example.my_slip_keyboard.LocusRegistEdit" />
+    </PreferenceScreen>
+
+</PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>
