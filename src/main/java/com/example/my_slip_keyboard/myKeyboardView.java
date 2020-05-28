@@ -78,6 +78,7 @@ public class myKeyboardView extends KeyboardView implements KeyboardView.OnKeybo
 
     @Override
 	public void onRelease(int primaryCode){
+		mOldThroughKey = NOT_A_KEY;
 		mKeyboardActionListener.onRelease(primaryCode);
 	}
 

@@ -353,10 +353,9 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 						mCandidateOn = true;
 					}
 				}
-//				else{
-//					if(mOnKeyThrough == 0) handleCharacter(primaryCode, keyCodes);
-//					break;
-//				}
+				else{
+					if(mOnKeyThrough == 0) handleCharacter(primaryCode, keyCodes);
+				}
                 if(mCurKeyboard == en_keyboard && mOnKeyThrough > 1){
 					handleEnter();
 				}
