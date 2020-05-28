@@ -10,6 +10,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
+import android.text.InputType;
 
 import android.view.KeyEvent;
 import android.view.View;
@@ -41,6 +42,7 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
     private Keyboard mSymbolsKeyboard ;
     private Keyboard mSymbolsShiftedKeyboard ;
     private Keyboard mJpnKeyboard;
+    private Keyboard mCurKeyboard;		//切り替え用のキーボード
 
 	// 変数
     private int mCapsLock = 0;
@@ -108,6 +110,14 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 		mExtractedTextRequest.flags = InputConnection.GET_TEXT_WITH_STYLES;
 		mExtractedTextRequest.hintMaxLines = 10;
 		mExtractedTextRequest.hintMaxChars = 10000;
+
+		// キーボードxmlのインスタンス化
+        en_keyboard = new Keyboard(this, R.xml.keyboard_en);
+        m12KeyNumKeyboard = new Keyboard(this, R.xml.keyboard_12key_num);
+        mSymbolsKeyboard = new Keyboard(this, R.xml.symbols);
+        mSymbolsShiftedKeyboard = new Keyboard(this, R.xml.symbols_shift);
+        mJpnKeyboard = new Keyboard(this, R.xml.keyboard_jp);
+
     }
 
 	public static NewKeyboard getInstance(){
@@ -118,13 +128,6 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
     @Override
     public View onCreateInputView() {
         super.onCreateInputView();
-
-		// キーボードxmlのインスタンス化
-        en_keyboard = new Keyboard(this, R.xml.keyboard_en);
-        m12KeyNumKeyboard = new Keyboard(this, R.xml.keyboard_12key_num);
-        mSymbolsKeyboard = new Keyboard(this, R.xml.symbols);
-        mSymbolsShiftedKeyboard = new Keyboard(this, R.xml.symbols_shift);
-        mJpnKeyboard = new Keyboard(this, R.xml.keyboard_jp);
 
 		// KeyboardViewのセット
         kv = (myKeyboardView) getLayoutInflater().inflate(R.layout.keyboard_view, null);
@@ -164,6 +167,22 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
         // the underlying state of the text editor could have changed in any way.
         mComposingTxt.setLength(0);
         updateCandidates();
+
+		// InputTypeによるキーボードの切り替え
+        switch (attribute.inputType & InputType.TYPE_MASK_CLASS) {
+            case InputType.TYPE_CLASS_NUMBER:
+            case InputType.TYPE_CLASS_DATETIME:
+            case InputType.TYPE_CLASS_PHONE:
+                mCurKeyboard = m12KeyNumKeyboard;
+                break;
+            default:
+                mCurKeyboard = mJpnKeyboard;
+        }
+		// 軌道登録時
+        if((attribute.inputType & InputType.TYPE_MASK_VARIATION)
+								== InputType.TYPE_TEXT_VARIATION_SHORT_MESSAGE){
+                mCurKeyboard = en_keyboard;
+        }
 
 		// 初回起動時の処理
         if(PREFERENCE_INIT == getState() ){
@@ -234,6 +253,7 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
     @Override
     public void onStartInputView(EditorInfo editorInfo, boolean restarting) {
 		super.onStartInputView(editorInfo, restarting);
+        kv.setKeyboard(mCurKeyboard);
 		//prefs = getSharedPreferences("NewKeyboardData", MODE_MULTI_PROCESS);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		mDoubleKey = prefs.getBoolean("doublekey", false);
@@ -333,9 +353,12 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 						mCandidateOn = true;
 					}
 				}
-				else{
-					if(mOnKeyThrough == 0) handleCharacter(primaryCode, keyCodes);
-					break;
+//				else{
+//					if(mOnKeyThrough == 0) handleCharacter(primaryCode, keyCodes);
+//					break;
+//				}
+                if(mCurKeyboard == en_keyboard && mOnKeyThrough > 1){
+					handleEnter();
 				}
         }
 		mOnKeyThrough = 0;
@@ -346,8 +369,8 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 
     private void handleCharacter(int primaryCode, int[] keyCodes) {
         InputConnection ic = getCurrentInputConnection();
-		Keyboard current = kv.getKeyboard();
-		if(current==mJpnKeyboard){
+		mCurKeyboard = kv.getKeyboard();
+		if(mCurKeyboard==mJpnKeyboard){
 			mComposingTxt.append((char)primaryCode);
 			mCommitTxt = r2h.getHiraText(mComposingTxt.toString());
 			if(mCommitTxt.isEmpty()){
@@ -396,8 +419,8 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 	}
 
 	private void handleShift(boolean swt){
-		Keyboard current = kv.getKeyboard();
-		if(current==en_keyboard){
+		mCurKeyboard = kv.getKeyboard();
+		if(mCurKeyboard==en_keyboard){
 			if(mCapsLock==2 || !swt){
 				mCapsLock=0;
 				kv.setShifted(false);
@@ -406,19 +429,19 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 				kv.setShifted(true);
 			}
 		}
-		else if(current==m12KeyNumKeyboard){
+		else if(mCurKeyboard==m12KeyNumKeyboard){
 			kv.setKeyboard(mSymbolsKeyboard);
 			kv.setShifted(true);
 		}
-		else if(current==mSymbolsKeyboard){
+		else if(mCurKeyboard==mSymbolsKeyboard){
 			kv.setKeyboard(m12KeyNumKeyboard);
 			kv.setShifted(false);
 		}
-		else if(current==mJpnKeyboard){
+		else if(mCurKeyboard==mJpnKeyboard){
 			kv.setKeyboard(mSymbolsShiftedKeyboard);
 			kv.setShifted(true);
 		}
-		else if(current==mSymbolsShiftedKeyboard){
+		else if(mCurKeyboard==mSymbolsShiftedKeyboard){
 			kv.setKeyboard(mJpnKeyboard);
 			kv.setShifted(false);
 		}
@@ -427,17 +450,17 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 	private void handleShift(){ handleShift(true);}
 
 	private void nextKeyboard(){
-		Keyboard current = kv.getKeyboard();
-		if(current==en_keyboard){
-			current = m12KeyNumKeyboard;
+		mCurKeyboard = kv.getKeyboard();
+		if(mCurKeyboard==en_keyboard){
+			mCurKeyboard = m12KeyNumKeyboard;
 		}
-		else if(current==m12KeyNumKeyboard){
-			current = mJpnKeyboard;
+		else if(mCurKeyboard==m12KeyNumKeyboard){
+			mCurKeyboard = mJpnKeyboard;
 		}
 		else{
-			current = en_keyboard;
+			mCurKeyboard = en_keyboard;
 		}
-		kv.setKeyboard(current);
+		kv.setKeyboard(mCurKeyboard);
 		kv.setShifted(false);
 		mCapsLock = 0;
 	}
