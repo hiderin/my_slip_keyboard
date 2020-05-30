@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.view.KeyEvent;
 
 //public class LocusRegistEdit extends AppCompatActivity{
 public class LocusRegistEdit extends Activity{
@@ -14,6 +16,7 @@ public class LocusRegistEdit extends Activity{
     /** Widgets which constitute this screen of activity */
     private Button mNextBtn;
     private Button mPrevBtn;
+	private EditText mEditTxt;
 
     /** Called when the activity is first created. */
     @Override
@@ -24,6 +27,20 @@ public class LocusRegistEdit extends Activity{
         /* get widgets */
         mNextBtn = (Button)findViewById(R.id.nextButton);
         mPrevBtn = (Button)findViewById(R.id.prevButton);
+
+		mEditTxt = (EditText)findViewById(R.id.LRegEditHira);
+		mEditTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if(event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+					if(event.getAction() == KeyEvent.ACTION_UP) {
+						EditTextOnEnter();
+					}
+					return true;
+				}
+				return false;
+			}
+		});
 
     }
 
@@ -54,4 +71,7 @@ public class LocusRegistEdit extends Activity{
 //                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 //                mEditTextHira.setText(sp.getString("SaveString", null), BufferType.NORMAL);
         }
+
+		private void EditTextOnEnter(){
+		}
 }
