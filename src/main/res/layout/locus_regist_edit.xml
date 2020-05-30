@@ -22,7 +22,7 @@
 		android:orientation="horizontal">
 
 		<Button
-			android:id="@+id/cancelButton"
+			android:id="@+id/prevButton"
 			android:layout_width="wrap_content"
 			android:layout_height="match_parent"
 			android:minWidth="48dip"
@@ -64,7 +64,7 @@
 		</LinearLayout>
 
 		<Button
-			android:id="@+id/registButton"
+			android:id="@+id/nextButton"
 			android:layout_width="wrap_content"
 			android:layout_height="match_parent"
 			android:layout_gravity="end"

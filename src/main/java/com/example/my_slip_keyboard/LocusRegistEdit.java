@@ -12,8 +12,8 @@ import android.widget.EditText;
 public class LocusRegistEdit extends Activity{
 
     /** Widgets which constitute this screen of activity */
-    private Button mRegistBtn;
-    private Button mCancelBtn;
+    private Button mNextBtn;
+    private Button mPrevBtn;
 
     /** Called when the activity is first created. */
     @Override
@@ -22,8 +22,8 @@ public class LocusRegistEdit extends Activity{
         setContentView(R.layout.locus_regist_edit);
 
         /* get widgets */
-        mRegistBtn = (Button)findViewById(R.id.registButton);
-        mCancelBtn = (Button)findViewById(R.id.cancelButton);
+        mNextBtn = (Button)findViewById(R.id.nextButton);
+        mPrevBtn = (Button)findViewById(R.id.prevButton);
 
     }
 
@@ -31,24 +31,24 @@ public class LocusRegistEdit extends Activity{
     public void onClick(View v) {
 
         switch (v.getId()) {
-            case R.id.registButton:
+            case R.id.nextButton:
                 /* save the word */
-                RegistBtnClick();
+                NextBtnClick();
                 break;
  
-            case R.id.cancelButton:
+            case R.id.prevButton:
                 /* cancel the edit */
-                CancelBtnClick();
+                PrevBtnClick();
                 break;
         }
     }
-        private void RegistBtnClick() {
+        private void NextBtnClick() {
                 // 保存
 //                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 //                sp.edit().putString("SaveString", mEditTextLocus.getText().toString()).commit();
         }
 
-        private void CancelBtnClick() {
+        private void PrevBtnClick() {
 			finish();
                 // 読み込み
 //                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
