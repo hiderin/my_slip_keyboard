@@ -258,6 +258,9 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		mDoubleKey = prefs.getBoolean("doublekey", false);
 
+		//シフトのリセット
+		kv.setShifted(false);
+
     }
 
     //キーボードが閉じる時に呼ばれるメソッド
