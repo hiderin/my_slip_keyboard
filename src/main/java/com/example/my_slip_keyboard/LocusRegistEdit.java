@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ListView;
+import android.widget.ArrayAdapter;
+import java.util.ArrayList;
 import android.view.KeyEvent;
 
 //public class LocusRegistEdit extends AppCompatActivity{
@@ -17,6 +20,7 @@ public class LocusRegistEdit extends Activity{
     private Button mNextBtn;
     private Button mPrevBtn;
 	private EditText mEditTxt;
+    private ListView mListView;
 
     /** Called when the activity is first created. */
     @Override
@@ -42,6 +46,24 @@ public class LocusRegistEdit extends Activity{
 			}
 		});
 
+	// ListViewに表示するリスト項目をArrayListで準備する
+    ArrayList data = new ArrayList<>();
+    data.add("国語");
+    data.add("社会");
+    data.add("算数");
+    data.add("理科");
+    data.add("生活");
+    data.add("音楽");
+    data.add("図画工作");
+    data.add("家庭");
+    data.add("体育");
+
+    // リスト項目とListViewを対応付けるArrayAdapterを用意する
+    ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
+
+    // ListViewにArrayAdapterを設定する
+    mListView = (ListView)findViewById(R.id.listView);
+    mListView.setAdapter(adapter);
     }
 
     /** @see android.view.View.OnClickListener */
