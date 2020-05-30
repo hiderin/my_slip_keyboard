@@ -22,6 +22,7 @@ public class LocusRegistEdit extends Activity{
 	private EditText mEditTxt;
     private ListView mListView;
     private ArrayList mListData;
+	private TextView mListNum;
 
     /** Called when the activity is first created. */
     @Override
@@ -37,6 +38,7 @@ public class LocusRegistEdit extends Activity{
         mPrevBtn = (Button)findViewById(R.id.prevButton);
 		mListView = (ListView)findViewById(R.id.listView);
 		mEditTxt = (EditText)findViewById(R.id.LRegEditHira);
+		mListNum = (TextView)findViewById(R.id.list_num);
 
 		mEditTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 			@Override
@@ -94,5 +96,7 @@ public class LocusRegistEdit extends Activity{
 			// EditTextのテキストをクリア
 			mEditTxt.getEditableText().clear();
 
+			// 軌道数の表示
+			mListNum.setText(String.valueOf(adapter.getCount()) + "個");
 		}
 }
