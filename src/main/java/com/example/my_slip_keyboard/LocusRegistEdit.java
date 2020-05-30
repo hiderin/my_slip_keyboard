@@ -29,6 +29,9 @@ public class LocusRegistEdit extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.locus_regist_edit);
 
+		// 変数の初期化
+		mListData = new ArrayList<>();
+
         /* get widgets */
         mNextBtn = (Button)findViewById(R.id.nextButton);
         mPrevBtn = (Button)findViewById(R.id.prevButton);
@@ -80,21 +83,16 @@ public class LocusRegistEdit extends Activity{
 
 		private void EditTextOnEnter(){
 			// ListViewに表示するリスト項目をArrayListで準備する
-			mListData = new ArrayList<>();
-			mListData.add("国語");
-			mListData.add("社会");
-			mListData.add("算数");
-			mListData.add("理科");
-			mListData.add("生活");
-			mListData.add("音楽");
-			mListData.add("図画工作");
-			mListData.add("家庭");
-			mListData.add("体育");
+			mListData.add(mEditTxt.getText().toString());
 
 			// リスト項目とListViewを対応付けるArrayAdapterを用意する
 			ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mListData);
 
 			// ListViewにArrayAdapterを設定する
 			mListView.setAdapter(adapter);
+
+			// EditTextのテキストをクリア
+			mEditTxt.getEditableText().clear();
+
 		}
 }
