@@ -21,6 +21,7 @@ public class LocusRegistEdit extends Activity{
     private Button mPrevBtn;
 	private EditText mEditTxt;
     private ListView mListView;
+    private ArrayList mListData;
 
     /** Called when the activity is first created. */
     @Override
@@ -31,13 +32,14 @@ public class LocusRegistEdit extends Activity{
         /* get widgets */
         mNextBtn = (Button)findViewById(R.id.nextButton);
         mPrevBtn = (Button)findViewById(R.id.prevButton);
-
+		mListView = (ListView)findViewById(R.id.listView);
 		mEditTxt = (EditText)findViewById(R.id.LRegEditHira);
+
 		mEditTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 				if(event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-					if(event.getAction() == KeyEvent.ACTION_UP) {
+					if(event.getAction() == KeyEvent.ACTION_DOWN) {
 						EditTextOnEnter();
 					}
 					return true;
@@ -46,24 +48,6 @@ public class LocusRegistEdit extends Activity{
 			}
 		});
 
-	// ListViewに表示するリスト項目をArrayListで準備する
-    ArrayList data = new ArrayList<>();
-    data.add("国語");
-    data.add("社会");
-    data.add("算数");
-    data.add("理科");
-    data.add("生活");
-    data.add("音楽");
-    data.add("図画工作");
-    data.add("家庭");
-    data.add("体育");
-
-    // リスト項目とListViewを対応付けるArrayAdapterを用意する
-    ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
-
-    // ListViewにArrayAdapterを設定する
-    mListView = (ListView)findViewById(R.id.listView);
-    mListView.setAdapter(adapter);
     }
 
     /** @see android.view.View.OnClickListener */
@@ -95,5 +79,22 @@ public class LocusRegistEdit extends Activity{
         }
 
 		private void EditTextOnEnter(){
+			// ListViewに表示するリスト項目をArrayListで準備する
+			mListData = new ArrayList<>();
+			mListData.add("国語");
+			mListData.add("社会");
+			mListData.add("算数");
+			mListData.add("理科");
+			mListData.add("生活");
+			mListData.add("音楽");
+			mListData.add("図画工作");
+			mListData.add("家庭");
+			mListData.add("体育");
+
+			// リスト項目とListViewを対応付けるArrayAdapterを用意する
+			ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mListData);
+
+			// ListViewにArrayAdapterを設定する
+			mListView.setAdapter(adapter);
 		}
 }
