@@ -21,9 +21,13 @@ public class LocusRegistEdit extends Activity{
     private Button mNextBtn;
     private Button mPrevBtn;
 	private EditText mEditTxt;
-    private ListView mListView;
-    private ArrayList mListData;
 	private TextView mListNum;
+    private ListView mListView;
+	private TextView mCharNumTxtView;
+
+	// 変数
+	private int mCharNum = 1;
+    private ArrayList mListData;
 
     /** Called when the activity is first created. */
     @Override
@@ -40,7 +44,9 @@ public class LocusRegistEdit extends Activity{
 		mListView = (ListView)findViewById(R.id.listView);
 		mEditTxt = (EditText)findViewById(R.id.LRegEditHira);
 		mListNum = (TextView)findViewById(R.id.list_num);
+		mCharNumTxtView = (TextView)findViewById(R.id.char_num);
 
+		// イベントリスナーの生成
 		mEditTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -53,58 +59,63 @@ public class LocusRegistEdit extends Activity{
 				return false;
 			}
 		});
+		mNextBtn.setOnClickListener(new View.OnClickListener(){
+			@Override
+			public void onClick(View v){
+				NextBtnClick();
+			}
+		});
+		mPrevBtn.setOnClickListener(new View.OnClickListener(){
+			@Override
+			public void onClick(View v){
+				PrevBtnClick();
+			}
+		});
 
     }
 
-    /** @see android.view.View.OnClickListener */
-    public void onClick(View v) {
+	//------------------------------------------------------------------------------
+	// イベントの処理
 
-        switch (v.getId()) {
-            case R.id.nextButton:
-                /* save the word */
-                NextBtnClick();
-                break;
- 
-            case R.id.prevButton:
-                /* cancel the edit */
-                PrevBtnClick();
-                break;
-        }
-    }
-        private void NextBtnClick() {
-                // 保存
-//                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-//                sp.edit().putString("SaveString", mEditTextLocus.getText().toString()).commit();
-        }
+	private void NextBtnClick() {
+		mCharNum++;
+		ShowEditChat();
+	}
 
-        private void PrevBtnClick() {
-			finish();
-                // 読み込み
-//                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-//                mEditTextHira.setText(sp.getString("SaveString", null), BufferType.NORMAL);
-        }
+	private void PrevBtnClick() {
+		if(mCharNum > 1) mCharNum--;
+		ShowEditChat();
+	}
 
-		private void EditTextOnEnter(){
+	private void EditTextOnEnter(){
 
-			// EditTextのテキストを取得
-			String liststr = mEditTxt.getText().toString();
-			if(liststr.length() == 0) return;
+		// EditTextのテキストを取得
+		String liststr = mEditTxt.getText().toString();
+		if(liststr.length() == 0) return;
 
-			// ListViewにテキストを追加
-			mListData.add(liststr);
-			//リストの重複を回避
-			mListData = new ArrayList<>(new HashSet<>(mListData));
+		// ListViewにテキストを追加
+		mListData.add(liststr);
+		//リストの重複を回避
+		mListData = new ArrayList<>(new HashSet<>(mListData));
 
-			// リスト項目とListViewを対応付けるArrayAdapterを用意する
-			ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mListData);
+		// リスト項目とListViewを対応付けるArrayAdapterを用意する
+		ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mListData);
 
-			// ListViewにArrayAdapterを設定する
-			mListView.setAdapter(adapter);
+		// ListViewにArrayAdapterを設定する
+		mListView.setAdapter(adapter);
 
-			// EditTextのテキストをクリア
-			mEditTxt.getEditableText().clear();
+		// EditTextのテキストをクリア
+		mEditTxt.getEditableText().clear();
 
-			// 軌道数の表示
-			mListNum.setText(String.valueOf(adapter.getCount()) + "個");
-		}
+		// 軌道数の表示
+		mListNum.setText(String.valueOf(adapter.getCount()) + "個");
+	}
+
+	//------------------------------------------------------------------------------
+	// private method
+
+	private void ShowEditChat(){
+		mCharNumTxtView.setText(String.valueOf(mCharNum));
+	}
+
 }
