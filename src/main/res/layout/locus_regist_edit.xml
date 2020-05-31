@@ -45,6 +45,7 @@
 				android:textSize="20sp" />
 
 			<TextView
+				android:id="@+id/main_char"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_horizontal"
@@ -54,6 +55,7 @@
 				android:textSize="100sp" />
 
 			<TextView
+				android:id="@+id/roma_char"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_horizontal"

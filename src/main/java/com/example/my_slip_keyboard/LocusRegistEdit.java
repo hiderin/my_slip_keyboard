@@ -14,8 +14,16 @@ import java.util.ArrayList;
 import android.view.KeyEvent;
 import java.util.HashSet;
 
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteCursor;
+
 //public class LocusRegistEdit extends AppCompatActivity{
 public class LocusRegistEdit extends Activity{
+
+	// DataBase Access
+	private LocusSQLiteOpenHelper hlpr;
+	private SQLiteDatabase mydb;
+	private final String dbname = "mydict.db";
 
     /** Widgets which constitute this screen of activity */
     private Button mNextBtn;
@@ -24,6 +32,8 @@ public class LocusRegistEdit extends Activity{
 	private TextView mListNum;
     private ListView mListView;
 	private TextView mCharNumTxtView;
+	private TextView mMainCharView;
+	private TextView mRomaCharView;
 
 	// 変数
 	private int mCharNum = 1;
@@ -38,6 +48,9 @@ public class LocusRegistEdit extends Activity{
 		// 変数の初期化
 		mListData = new ArrayList<>();
 
+		// データベース
+		hlpr = new LocusSQLiteOpenHelper(this,dbname);
+
         /* get widgets */
         mNextBtn = (Button)findViewById(R.id.nextButton);
         mPrevBtn = (Button)findViewById(R.id.prevButton);
@@ -45,6 +58,8 @@ public class LocusRegistEdit extends Activity{
 		mEditTxt = (EditText)findViewById(R.id.LRegEditHira);
 		mListNum = (TextView)findViewById(R.id.list_num);
 		mCharNumTxtView = (TextView)findViewById(R.id.char_num);
+		mMainCharView = (TextView)findViewById(R.id.main_char);
+		mRomaCharView = (TextView)findViewById(R.id.roma_char);
 
 		// イベントリスナーの生成
 		mEditTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -83,8 +98,10 @@ public class LocusRegistEdit extends Activity{
 	}
 
 	private void PrevBtnClick() {
-		if(mCharNum > 1) mCharNum--;
-		ShowEditChat();
+		if(mCharNum > 1){
+			mCharNum--;
+			ShowEditChat();
+		}
 	}
 
 	private void EditTextOnEnter(){
@@ -116,6 +133,40 @@ public class LocusRegistEdit extends Activity{
 
 	private void ShowEditChat(){
 		mCharNumTxtView.setText(String.valueOf(mCharNum));
+		mMainCharView.setText(getMainChar());
+		mRomaCharView.setText(getRomaChar());
+	}
+
+	private String getMainChar(){
+		return getStringFromDB(makeSQL_getMainChar());
+	}
+
+	private String getRomaChar(){
+		return getStringFromDB(makeSQL_getRomaChar());
+	}
+	
+	//------------------------------------------------------------------------------
+	// SQLite関係
+	private String getStringFromDB(String SQLstr){
+		String rtn = "";
+		mydb = hlpr.getWritableDatabase();
+		SQLiteCursor c = (SQLiteCursor)mydb.rawQuery(SQLstr, null);
+		c.moveToFirst();
+		if(c.getCount()>0) rtn = c.getString(0);
+		mydb.close();
+		return rtn;
+	}
+
+	private String makeSQL_getMainChar(){
+		String rtn =  "SELECT hira FROM hira_master_table WHERE char_no='";
+		rtn += String.valueOf(mCharNum) + "';";
+		return rtn;
+	}
+
+	private String makeSQL_getRomaChar(){
+		String rtn =  "SELECT roma FROM hira_master_table WHERE char_no='";
+		rtn += String.valueOf(mCharNum) + "';";
+		return rtn;
 	}
 
 }
