@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 import android.view.KeyEvent;
+import java.util.HashSet;
 
 //public class LocusRegistEdit extends AppCompatActivity{
 public class LocusRegistEdit extends Activity{
@@ -84,8 +85,15 @@ public class LocusRegistEdit extends Activity{
         }
 
 		private void EditTextOnEnter(){
-			// ListViewに表示するリスト項目をArrayListで準備する
-			mListData.add(mEditTxt.getText().toString());
+
+			// EditTextのテキストを取得
+			String liststr = mEditTxt.getText().toString();
+			if(liststr.length() == 0) return;
+
+			// ListViewにテキストを追加
+			mListData.add(liststr);
+			//リストの重複を回避
+			mListData = new ArrayList<>(new HashSet<>(mListData));
 
 			// リスト項目とListViewを対応付けるArrayAdapterを用意する
 			ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mListData);
