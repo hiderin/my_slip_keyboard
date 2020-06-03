@@ -10,9 +10,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import java.util.ArrayList;
 import android.view.KeyEvent;
 import java.util.HashSet;
+import android.widget.TextView.BufferType;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteCursor;
@@ -61,7 +63,8 @@ public class LocusRegistEdit extends Activity{
 		mMainCharView = (TextView)findViewById(R.id.main_char);
 		mRomaCharView = (TextView)findViewById(R.id.roma_char);
 
-		// イベントリスナーの生成
+		//// イベントリスナーの生成 /////
+		// EditTxt
 		mEditTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -74,18 +77,27 @@ public class LocusRegistEdit extends Activity{
 				return false;
 			}
 		});
+		// NextButton
 		mNextBtn.setOnClickListener(new View.OnClickListener(){
 			@Override
 			public void onClick(View v){
 				NextBtnClick();
 			}
 		});
+		// PrevButton
 		mPrevBtn.setOnClickListener(new View.OnClickListener(){
 			@Override
 			public void onClick(View v){
 				PrevBtnClick();
 			}
 		});
+		// ListView
+		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
+					onLocusListItemClick(parent, view, position, l);
+				}
+			});
 
 		// 初期表示の設定
 		mCharNum = getIntFromDB(makeSQL_getStartCharNum());
@@ -130,6 +142,11 @@ public class LocusRegistEdit extends Activity{
 		// EditTextのテキストをクリア
 		mEditTxt.getEditableText().clear();
 
+	}
+
+	private void onLocusListItemClick(AdapterView<?> parent, View view, int position, long l){
+		String item = (String)parent.getItemAtPosition(position);
+		mEditTxt.setText(item, BufferType.NORMAL);
 	}
 
 	//==============================================================================
