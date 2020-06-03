@@ -89,18 +89,23 @@ public class LocusRegistEdit extends Activity{
 
     }
 
-	//------------------------------------------------------------------------------
+	//==============================================================================
 	// イベントの処理
+	//==============================================================================
 
 	private void NextBtnClick() {
+		putCurrentLocusList();
 		mCharNum++;
-		ShowEditChat();
+		ShowEditChar();
+		SetNextLocusList();
 	}
 
 	private void PrevBtnClick() {
+		putCurrentLocusList();
 		if(mCharNum > 1){
 			mCharNum--;
-			ShowEditChat();
+			ShowEditChar();
+			SetNextLocusList();
 		}
 	}
 
@@ -112,32 +117,41 @@ public class LocusRegistEdit extends Activity{
 
 		// ListViewにテキストを追加
 		mListData.add(liststr);
-		//リストの重複を回避
-		mListData = new ArrayList<>(new HashSet<>(mListData));
 
-		// リスト項目とListViewを対応付けるArrayAdapterを用意する
-		ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mListData);
-
-		// ListViewにArrayAdapterを設定する
-		mListView.setAdapter(adapter);
+		// ListViewの更新
+		updateLocusListView();
 
 		// EditTextのテキストをクリア
 		mEditTxt.getEditableText().clear();
 
-		// 軌道数の表示
-		mListNum.setText(String.valueOf(adapter.getCount()) + "個");
 	}
 
-	//------------------------------------------------------------------------------
+	//==============================================================================
 	// private method
+	//==============================================================================
 
-	private void ShowEditChat(){
+	//現在のLocusListをDBに格納
+	private void putCurrentLocusList(){
+		// DBから該当のLucusListを削除
+		exeNonQuery(makeSQL_deleteTargetList());
+		// DBに現在のLocusListを追加
+		exeNonQuery(makeSQL_insertLocusList());
+	}
+
+	// メインテキストビューの表示
+	private void ShowEditChar(){
 		mCharNumTxtView.setText(String.valueOf(mCharNum));
 		mMainCharView.setText(getMainChar());
 		mRomaCharView.setText(getRomaChar());
+	}
 
+	private void SetNextLocusList(){
 		// 登録された軌道の取得
 		mListData = getStringListFromDB(makeSQL_getLocusList());
+		// ListViewの更新
+		updateLocusListView();
+		// EditTextのテキストをクリア
+		mEditTxt.getEditableText().clear();
 	}
 
 	private String getMainChar(){
@@ -148,8 +162,26 @@ public class LocusRegistEdit extends Activity{
 		return getStringFromDB(makeSQL_getRomaChar());
 	}
 
-	//------------------------------------------------------------------------------
+	private void updateLocusListView(){
+		//リストの重複を回避
+		mListData = new ArrayList<>(new HashSet<>(mListData));
+
+		// リスト項目とListViewを対応付けるArrayAdapterを用意する
+		ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mListData);
+
+		// ListViewにArrayAdapterを設定する
+		mListView.setAdapter(adapter);
+
+		// 軌道数の表示
+		mListNum.setText(String.valueOf(adapter.getCount()) + "個");
+	}
+
+	//==============================================================================
 	// SQLite関係
+	//==============================================================================
+
+	//------------------------------------------------------------------------------
+	// DB操作BASE
 
 	private String getStringFromDB(String SQLstr){
 		String rtn = "";
@@ -174,6 +206,15 @@ public class LocusRegistEdit extends Activity{
 		return rtn;
 	}
 
+	private void exeNonQuery(String SQLstr){
+		mydb = hlpr.getWritableDatabase();
+		mydb.execSQL(SQLstr);
+		mydb.close();
+	}
+
+	//------------------------------------------------------------------------------
+	// SQL文字列の作成
+
 	private String makeSQL_getMainChar(){
 		String rtn =  "SELECT hira FROM hira_master_table WHERE char_no='";
 		rtn += String.valueOf(mCharNum) + "';";
@@ -190,5 +231,28 @@ public class LocusRegistEdit extends Activity{
 		String rtn = "SELECT locus_string FROM char_data_table WHERE char_no='";
 		rtn += String.valueOf(mCharNum) + "';";
 		return rtn;
+	}
+
+	private String makeSQL_deleteTargetList(){
+		String rtn = "DELETE FROM char_data_table WHERE char_no='";
+		rtn += String.valueOf(mCharNum) + "';";
+		return rtn;
+	}
+
+	private String makeSQL_insertLocusList(){
+		int i, cnt;
+		String rtn, item;
+		
+		rtn = "INSERT INTO char_data_table(locus_string, char_no, str_len) VALUES ";
+		cnt = mListData.size();
+
+		for(i=0;i<cnt;i++){
+			if(i>0) rtn += ",";
+			item = (String)mListData.get(i);
+			rtn += "('" + item + "', " + String.valueOf(mCharNum) + " , ";
+			rtn +=  String.valueOf(item.length()) + " )";
+		}
+		
+		return rtn + ";";
 	}
 }
