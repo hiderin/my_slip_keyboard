@@ -87,6 +87,12 @@ public class LocusRegistEdit extends Activity{
 			}
 		});
 
+		// 初期表示の設定
+		mCharNum = getIntFromDB(makeSQL_getStartCharNum());
+		if(mCharNum == 0) mCharNum = 1;
+		ShowEditChar();
+		SetNextLocusList();
+
     }
 
 	//==============================================================================
@@ -207,6 +213,16 @@ public class LocusRegistEdit extends Activity{
 		return rtn;
 	}
 
+	private int getIntFromDB(String SQLstr){
+		int rtn = 0;
+		mydb = hlpr.getWritableDatabase();
+		SQLiteCursor c = (SQLiteCursor)mydb.rawQuery(SQLstr, null);
+		c.moveToFirst();
+		if(c.getCount()>0) rtn = c.getInt(0);
+		mydb.close();
+		return rtn;
+	}
+
 	private void exeNonQuery(String SQLstr){
 		mydb = hlpr.getWritableDatabase();
 		mydb.execSQL(SQLstr);
@@ -256,4 +272,16 @@ public class LocusRegistEdit extends Activity{
 		
 		return rtn + ";";
 	}
+
+	private String makeSQL_getStartCharNum(){
+		String rtn = "";
+		rtn += "SELECT A.char_no FROM ";
+		rtn += "(SELECT char_no FROM hira_master_table) AS A ";
+		rtn += "LEFT JOIN ";
+		rtn += "(SELECT char_no FROM char_data_table) AS B ";
+		rtn += "ON A.char_no = B.char_no ";
+		rtn += "WHERE B.char_no IS NULL ORDER BY A.char_no; ";
+		return rtn;
+	}
+
 }
