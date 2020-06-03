@@ -132,10 +132,12 @@ public class LocusRegistEdit extends Activity{
 
 	//現在のLocusListをDBに格納
 	private void putCurrentLocusList(){
-		// DBから該当のLucusListを削除
-		exeNonQuery(makeSQL_deleteTargetList());
-		// DBに現在のLocusListを追加
-		exeNonQuery(makeSQL_insertLocusList());
+		if(mListData.size() > 0){
+			// DBから該当のLucusListを削除
+			exeNonQuery(makeSQL_deleteTargetList());
+			// DBに現在のLocusListを追加
+			exeNonQuery(makeSQL_insertLocusList());
+		}
 	}
 
 	// メインテキストビューの表示
@@ -198,7 +200,6 @@ public class LocusRegistEdit extends Activity{
 		rtn = new ArrayList<>();
 		mydb = hlpr.getWritableDatabase();
 		SQLiteCursor c = (SQLiteCursor)mydb.rawQuery(SQLstr, null);
-		c.moveToFirst();
 		while(c.moveToNext()){
 			rtn.add(c.getString(0));
 		}
