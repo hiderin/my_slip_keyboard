@@ -135,6 +135,9 @@ public class LocusRegistEdit extends Activity{
 		mCharNumTxtView.setText(String.valueOf(mCharNum));
 		mMainCharView.setText(getMainChar());
 		mRomaCharView.setText(getRomaChar());
+
+		// 登録された軌道の取得
+		mListData = getStringListFromDB(makeSQL_getLocusList());
 	}
 
 	private String getMainChar(){
@@ -144,15 +147,29 @@ public class LocusRegistEdit extends Activity{
 	private String getRomaChar(){
 		return getStringFromDB(makeSQL_getRomaChar());
 	}
-	
+
 	//------------------------------------------------------------------------------
 	// SQLite関係
+
 	private String getStringFromDB(String SQLstr){
 		String rtn = "";
 		mydb = hlpr.getWritableDatabase();
 		SQLiteCursor c = (SQLiteCursor)mydb.rawQuery(SQLstr, null);
 		c.moveToFirst();
 		if(c.getCount()>0) rtn = c.getString(0);
+		mydb.close();
+		return rtn;
+	}
+
+	private ArrayList getStringListFromDB(String SQLstr){
+		ArrayList rtn;
+		rtn = new ArrayList<>();
+		mydb = hlpr.getWritableDatabase();
+		SQLiteCursor c = (SQLiteCursor)mydb.rawQuery(SQLstr, null);
+		c.moveToFirst();
+		while(c.moveToNext()){
+			rtn.add(c.getString(0));
+		}
 		mydb.close();
 		return rtn;
 	}
@@ -169,4 +186,9 @@ public class LocusRegistEdit extends Activity{
 		return rtn;
 	}
 
+	private String makeSQL_getLocusList(){
+		String rtn = "SELECT locus_string FROM char_data_table WHERE char_no='";
+		rtn += String.valueOf(mCharNum) + "';";
+		return rtn;
+	}
 }
