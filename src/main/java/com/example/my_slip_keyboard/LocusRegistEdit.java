@@ -19,6 +19,9 @@ import android.widget.TextView.BufferType;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteCursor;
 
+import android.preference.PreferenceManager;
+import android.content.SharedPreferences;
+
 //public class LocusRegistEdit extends AppCompatActivity{
 public class LocusRegistEdit extends Activity{
 
@@ -107,8 +110,22 @@ public class LocusRegistEdit extends Activity{
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp.edit().putBoolean("LocusRegist", true).commit();
+	}
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp.edit().putBoolean("LocusRegist", false).commit();
+	}
+
 	//==============================================================================
-	// イベントの処理
+	// Widgetのイベント処理
 	//==============================================================================
 
 	private void NextBtnClick() {

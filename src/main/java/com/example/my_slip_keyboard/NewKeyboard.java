@@ -60,6 +60,7 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 	private int mOldKeyCode;
 
 	private boolean mDoubleKey = false;
+	private boolean mLocusEdit;
 
 	// 初回起動判定
     public static final int PREFERENCE_INIT = 0;
@@ -253,10 +254,16 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
     @Override
     public void onStartInputView(EditorInfo editorInfo, boolean restarting) {
 		super.onStartInputView(editorInfo, restarting);
-        kv.setKeyboard(mCurKeyboard);
-		//prefs = getSharedPreferences("NewKeyboardData", MODE_MULTI_PROCESS);
+		// Preferenceの取得
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		mDoubleKey = prefs.getBoolean("doublekey", false);
+		mLocusEdit = prefs.getBoolean("LocusRegist", false);
+
+		// 設定からキーボードを再設定
+		if(mLocusEdit) mCurKeyboard = m12KeyNumKeyboard;
+
+		//カレントキーボードのセット
+        kv.setKeyboard(mCurKeyboard);
 
 		//シフトのリセット
 		kv.setShifted(false);
