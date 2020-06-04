@@ -260,7 +260,7 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 		mLocusEdit = prefs.getBoolean("LocusRegist", false);
 
 		// 設定からキーボードを再設定
-		if(mLocusEdit) mCurKeyboard = m12KeyNumKeyboard;
+		if(mLocusEdit) mCurKeyboard = mJpnKeyboard;
 
 		//カレントキーボードのセット
         kv.setKeyboard(mCurKeyboard);
@@ -366,7 +366,7 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 				else{
 					if(mOnKeyThrough == 0) handleCharacter(primaryCode, keyCodes);
 				}
-                if(mCurKeyboard == en_keyboard && mOnKeyThrough > 1){
+                if(mLocusEdit && mOnKeyThrough > 1){
 					handleEnter();
 				}
         }
@@ -379,7 +379,7 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
     private void handleCharacter(int primaryCode, int[] keyCodes) {
         InputConnection ic = getCurrentInputConnection();
 		mCurKeyboard = kv.getKeyboard();
-		if(mCurKeyboard==mJpnKeyboard){
+		if(mCurKeyboard==mJpnKeyboard && !mLocusEdit){
 			mComposingTxt.append((char)primaryCode);
 			mCommitTxt = r2h.getHiraText(mComposingTxt.toString());
 			if(mCommitTxt.isEmpty()){
