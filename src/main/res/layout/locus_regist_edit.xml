@@ -90,7 +90,7 @@
 		android:layout_height="wrap_content"
 		android:hint="@string/locus_text"
 		android:importantForAutofill="no"
-		android:inputType="textShortMessage"
+		android:inputType="text"
 		android:maxLength="200" />
 
 	<LinearLayout
