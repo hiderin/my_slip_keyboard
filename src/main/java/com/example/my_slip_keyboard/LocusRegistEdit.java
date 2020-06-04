@@ -145,8 +145,17 @@ public class LocusRegistEdit extends Activity{
 	}
 
 	private void onLocusListItemClick(AdapterView<?> parent, View view, int position, long l){
+		// EditTextのテキストを取得
+		String liststr = mEditTxt.getText().toString();
+		// 選択されたListViewの文字列をTextEditに表示
 		String item = (String)parent.getItemAtPosition(position);
 		mEditTxt.setText(item, BufferType.NORMAL);
+		// LocusListから対象のitemを削除
+		mListData.remove(position);
+		// LocusListにEditTextの文字列を追加
+		if(liststr.length() > 0) mListData.add(liststr);
+		// ListViewの更新
+		updateLocusListView();
 	}
 
 	//==============================================================================
