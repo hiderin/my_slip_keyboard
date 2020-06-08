@@ -43,6 +43,7 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
     private Keyboard mSymbolsShiftedKeyboard ;
     private Keyboard mJpnKeyboard;
     private Keyboard mCurKeyboard;		//切り替え用のキーボード
+    private Keyboard mBaseKeyboard;		//切り替え用のキーボード
 
 	// 変数
     private int mCapsLock = 0;
@@ -178,11 +179,13 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
                 break;
             default:
                 mCurKeyboard = mJpnKeyboard;
+                mBaseKeyboard = mJpnKeyboard;
         }
 		// 軌道登録時
         if((attribute.inputType & InputType.TYPE_MASK_VARIATION)
 								== InputType.TYPE_TEXT_VARIATION_SHORT_MESSAGE){
                 mCurKeyboard = en_keyboard;
+                mBaseKeyboard = en_keyboard;
         }
 
 		// 初回起動時の処理
@@ -260,7 +263,10 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 		mLocusEdit = prefs.getBoolean("LocusRegist", false);
 
 		// 設定からキーボードを再設定
-		if(mLocusEdit) mCurKeyboard = mJpnKeyboard;
+		if(mLocusEdit) {
+			mCurKeyboard = mJpnKeyboard;
+			mBaseKeyboard = mJpnKeyboard;
+		}
 
 		//カレントキーボードのセット
         kv.setKeyboard(mCurKeyboard);
@@ -465,12 +471,18 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 		mCurKeyboard = kv.getKeyboard();
 		if(mCurKeyboard==en_keyboard){
 			mCurKeyboard = mJpnKeyboard;
+			mBaseKeyboard = mJpnKeyboard;
 		}
 		else if(mCurKeyboard==m12KeyNumKeyboard){
 			mCurKeyboard = mJpnKeyboard;
+			mBaseKeyboard = mJpnKeyboard;
+		}
+		else if(mCurKeyboard==mSymbolsKeyboard){
+			mCurKeyboard = mBaseKeyboard;
 		}
 		else{
 			mCurKeyboard = en_keyboard;
+			mBaseKeyboard = en_keyboard;
 		}
 		kv.setKeyboard(mCurKeyboard);
 		kv.setShifted(false);
