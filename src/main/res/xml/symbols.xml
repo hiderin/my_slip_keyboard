@@ -70,10 +70,10 @@
     <Row  android:rowEdgeFlags="bottom">
         <Key android:codes="-2" android:keyIcon="@drawable/kc_sym" android:keyWidth="15%p" 
                 android:keyEdgeFlags="left" />
-        <Key android:codes="204" android:keyLabel="←" android:keyWidth="20%p" />
-        <Key android:codes="62" android:keyIcon="@drawable/sym_keyboard_space" android:keyWidth="30%p" 
+        <Key android:codes="21" android:keyLabel="←" android:keyWidth="17%p" />
+        <Key android:codes="62" android:keyIcon="@drawable/sym_keyboard_space" android:keyWidth="31%p" 
                 android:isRepeatable="true"/>
-        <Key android:codes="44" android:keyLabel="," android:keyWidth="15%p" />
+        <Key android:codes="22" android:keyLabel="→" android:keyWidth="17%p" />
         <Key android:codes="66" android:keyIcon="@drawable/sym_keyboard_return"
                 android:keyWidth="20%p" android:keyEdgeFlags="right"
                 />
