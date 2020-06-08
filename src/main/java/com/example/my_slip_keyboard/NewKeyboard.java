@@ -316,6 +316,9 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
             case Keyboard.KEYCODE_SHIFT:
 				handleShift();
                 break;
+            case KeyEvent.KEYCODE_LANGUAGE_SWITCH:
+				changeKeyboard();
+				break;
             case Keyboard.KEYCODE_MODE_CHANGE:
 				nextKeyboard();
                 break;
@@ -461,7 +464,7 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 	private void nextKeyboard(){
 		mCurKeyboard = kv.getKeyboard();
 		if(mCurKeyboard==en_keyboard){
-			mCurKeyboard = m12KeyNumKeyboard;
+			mCurKeyboard = mJpnKeyboard;
 		}
 		else if(mCurKeyboard==m12KeyNumKeyboard){
 			mCurKeyboard = mJpnKeyboard;
@@ -472,6 +475,24 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 		kv.setKeyboard(mCurKeyboard);
 		kv.setShifted(false);
 		mCapsLock = 0;
+	}
+
+	private void changeKeyboard(){
+		mCurKeyboard = kv.getKeyboard();
+		if(mCurKeyboard==en_keyboard){
+			mCurKeyboard = mSymbolsKeyboard;
+		}
+		else if(mCurKeyboard==mJpnKeyboard){
+			mCurKeyboard = mSymbolsKeyboard;
+		}
+		else{
+			mCurKeyboard = mJpnKeyboard;
+		}
+		kv.setKeyboard(mCurKeyboard);
+		if(mCurKeyboard == mSymbolsKeyboard){
+			kv.setShifted(true);
+			mCapsLock = 1;
+		}
 	}
 
 	private void handleEnter(){
