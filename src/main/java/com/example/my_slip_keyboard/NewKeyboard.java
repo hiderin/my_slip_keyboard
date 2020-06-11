@@ -404,7 +404,7 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 			}
 		}
 		else{
-			if (kv.isShifted()) {
+			if (kv.isShifted() && mCurKeyboard==en_keyboard) {
 				primaryCode = Character.toUpperCase(primaryCode);
 				if (mCapsLock==1) {
 					handleShift(false);
