@@ -369,9 +369,14 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 					mTemporaryText = getFixText(primaryCode);
 					if(!mTemporaryText.isEmpty()){
 						mCandidateList = getFixList(primaryCode);
-						ic.setComposingText(mTemporaryText,1);
-						updateCandidates(mCandidateList);
-						mCandidateOn = true;
+						if(mCandidateList.size() > 0){
+							ic.setComposingText(mTemporaryText,1);
+							updateCandidates(mCandidateList);
+							mCandidateOn = true;
+						}
+						else{
+							ic.commitText(mTemporaryText,mTemporaryText.length());
+						}
 					}
 				}
 				else{
@@ -516,8 +521,12 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 	}
 
 	private void handleEnter(){
-		if(mComposingTxt.length()>0){
+		if(mComposingTxt.length()>0 ){
 			commitTyped(getCurrentInputConnection());
+		}else if( mTemporaryText.length()>0){
+			StringBuilder tmpbuilder = new StringBuilder();
+			tmpbuilder.append(mTemporaryText);
+			commitTyped(getCurrentInputConnection(), tmpbuilder);
 		}else{
         	InputConnection ic = getCurrentInputConnection();
 			ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
