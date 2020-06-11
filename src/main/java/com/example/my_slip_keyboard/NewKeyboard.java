@@ -40,6 +40,7 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
     private Keyboard en_keyboard;
     private Keyboard m12KeyNumKeyboard;
     private Keyboard mSymbolsKeyboard ;
+    private Keyboard mJpSymbolsKeyboard ;
     private Keyboard mSymbolsShiftedKeyboard ;
     private Keyboard mJpnKeyboard;
     private Keyboard mCurKeyboard;		//切り替え用のキーボード
@@ -117,6 +118,7 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
         en_keyboard = new Keyboard(this, R.xml.keyboard_en);
         m12KeyNumKeyboard = new Keyboard(this, R.xml.keyboard_12key_num);
         mSymbolsKeyboard = new Keyboard(this, R.xml.symbols);
+        mJpSymbolsKeyboard = new Keyboard(this, R.xml.symbols_jp);
         mSymbolsShiftedKeyboard = new Keyboard(this, R.xml.symbols_shift);
         mJpnKeyboard = new Keyboard(this, R.xml.keyboard_jp);
 
@@ -455,6 +457,10 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 			kv.setKeyboard(m12KeyNumKeyboard);
 			kv.setShifted(false);
 		}
+		else if(mCurKeyboard==mJpSymbolsKeyboard){
+			kv.setKeyboard(m12KeyNumKeyboard);
+			kv.setShifted(false);
+		}
 		else if(mCurKeyboard==mJpnKeyboard){
 			kv.setKeyboard(mSymbolsShiftedKeyboard);
 			kv.setShifted(true);
@@ -477,7 +483,8 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 			mCurKeyboard = mJpnKeyboard;
 			mBaseKeyboard = mJpnKeyboard;
 		}
-		else if(mCurKeyboard==mSymbolsKeyboard){
+		else if(mCurKeyboard==mSymbolsKeyboard ||
+				mCurKeyboard==mJpSymbolsKeyboard){
 			mCurKeyboard = mBaseKeyboard;
 		}
 		else{
@@ -495,13 +502,14 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 			mCurKeyboard = mSymbolsKeyboard;
 		}
 		else if(mCurKeyboard==mJpnKeyboard){
-			mCurKeyboard = mSymbolsKeyboard;
+			mCurKeyboard = mJpSymbolsKeyboard;
 		}
 		else{
 			mCurKeyboard = mJpnKeyboard;
 		}
 		kv.setKeyboard(mCurKeyboard);
-		if(mCurKeyboard == mSymbolsKeyboard){
+		if(mCurKeyboard == mSymbolsKeyboard ||
+				mCurKeyboard == mJpSymbolsKeyboard){
 			kv.setShifted(true);
 			mCapsLock = 1;
 		}
@@ -547,6 +555,15 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 			case 12400: return "よろしくね";
 			case 12500: return "お願いします";
 			case 12600: return "です";
+			case 14800: return "「";
+			case 14900: return "」";
+			case 15000: return "年";
+			case 15100: return "月";
+			case 15200: return "日";
+			case 15300: return "時";
+			case 15400: return "分";
+			case 15500: return "秒";
+			case 15600: return "度";
 			default: return "";
 		}
 	}
@@ -641,6 +658,40 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 				break;
 			case 12500:
 				rtnList.add("お願いします");
+				break;
+			case 14800:
+				rtnList.add("『");
+				rtnList.add("〈");
+				rtnList.add("【");
+				rtnList.add("《");
+				rtnList.add("〔");
+				rtnList.add("（");
+				rtnList.add("＜");
+				rtnList.add("［");
+				rtnList.add("｛");
+				break;
+			case 14900:
+				rtnList.add("』");
+				rtnList.add("〉");
+				rtnList.add("】");
+				rtnList.add("》");
+				rtnList.add("〕");
+				rtnList.add("）");
+				rtnList.add("＞");
+				rtnList.add("］");
+				rtnList.add("｝");
+				break;
+			case 15600:
+				rtnList.add("本");
+				rtnList.add("枚");
+				rtnList.add("冊");
+				rtnList.add("回");
+				rtnList.add("周");
+				rtnList.add("室");
+				rtnList.add("泊");
+				rtnList.add("匹");
+				rtnList.add("頭");
+				rtnList.add("°");
 				break;
 		}
 		return rtnList;
