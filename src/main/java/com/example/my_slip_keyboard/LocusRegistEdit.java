@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
+import android.widget.Spinner;
 import java.util.ArrayList;
 import android.view.KeyEvent;
 import java.util.HashSet;
@@ -39,6 +40,7 @@ public class LocusRegistEdit extends Activity{
 	private TextView mCharNumTxtView;
 	private TextView mMainCharView;
 	private TextView mRomaCharView;
+	private Spinner mModeSpinner;
 
 	// 変数
 	private int mCharNum = 1;
@@ -65,6 +67,13 @@ public class LocusRegistEdit extends Activity{
 		mCharNumTxtView = (TextView)findViewById(R.id.char_num);
 		mMainCharView = (TextView)findViewById(R.id.main_char);
 		mRomaCharView = (TextView)findViewById(R.id.roma_char);
+		mModeSpinner = (Spinner) findViewById(R.id.Spinner01);
+
+		// リストをセット
+		ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.regist_mode_list_str,
+				android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		mModeSpinner.setAdapter(adapter);
 
 		//// イベントリスナーの生成 /////
 		// EditTxt

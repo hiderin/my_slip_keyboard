@@ -36,4 +36,10 @@
     <string name="char_hira">あ</string>
     <string name="next_txt">＞</string>
     <string name="locus_text">locus_text</string>
+
+	<string-array name="regist_mode_list_str">
+		<item>Sample0</item>
+		<item>Sample1</item>
+	</string-array>
+
 </resources>
