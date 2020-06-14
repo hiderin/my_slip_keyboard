@@ -45,6 +45,7 @@ public class LocusRegistEdit extends Activity{
 	// 変数
 	private int mCharNum = 1;
     private ArrayList mListData;
+	private int mCurrentMode = 0;
 
     /** Called when the activity is first created. */
     @Override
@@ -71,7 +72,7 @@ public class LocusRegistEdit extends Activity{
 
 		// リストをセット
 		ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.regist_mode_list_str,
-				android.R.layout.simple_spinner_item);
+				R.layout.my_simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mModeSpinner.setAdapter(adapter);
 
@@ -110,13 +111,27 @@ public class LocusRegistEdit extends Activity{
 					onLocusListItemClick(parent, view, position, l);
 				}
 			});
+		// mModeSpinner
+		mModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				onModeSpinerItemSelected( parent, view, position, id);
+            }
+			@Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
 		// 初期表示の設定
 		mCharNum = getIntFromDB(makeSQL_getStartCharNum());
-		if(mCharNum == 0) mCharNum = 1;
-		ShowEditChar();
-		SetNextLocusList();
-
+		if(mCharNum==0){
+			mCurrentMode = 1;
+			mCharNum = getIntFromDB(makeSQL_getStartMoveNum());
+			if(mCharNum==0){
+				mCharNum = 1;
+			}
+		}
+		setLocusEditMode();
     }
 
     @Override
@@ -184,17 +199,43 @@ public class LocusRegistEdit extends Activity{
 		updateLocusListView();
 	}
 
+	private void onModeSpinerItemSelected(AdapterView<?> parent, View view, int position, long id){
+		mCurrentMode = position;
+		if(mCurrentMode==0){
+			mCharNum = getIntFromDB(makeSQL_getStartCharNum());
+		}else{
+			mCharNum = getIntFromDB(makeSQL_getStartMoveNum());
+			if(mCharNum==0) mCharNum = 1;
+		}
+		setLocusEditMode();
+	}
+
 	//==============================================================================
 	// private method
 	//==============================================================================
 
+	// 軌道登録のモードを表示
+	private void setLocusEditMode(){
+		ShowEditChar();
+		SetNextLocusList();
+	}
+
 	//現在のLocusListをDBに格納
 	private void putCurrentLocusList(){
-		// DBから該当のLucusListを削除
-		exeNonQuery(makeSQL_deleteTargetList());
-		if(mListData.size() > 0){
-			// DBに現在のLocusListを追加
-			exeNonQuery(makeSQL_insertLocusList());
+		if(mCurrentMode==0){
+			// DBから該当のLucusListを削除
+			exeNonQuery(makeSQL_deleteTargetList());
+			if(mListData.size() > 0){
+				// DBに現在のLocusListを追加
+				exeNonQuery(makeSQL_insertLocusList());
+			}
+		}else{
+			// DBから該当のLucusListを削除
+			exeNonQuery(makeSQL_deleteTargetList_Move());
+			if(mListData.size() > 0){
+				// DBに現在のLocusListを追加
+				exeNonQuery(makeSQL_insertLocusList_Move());
+			}
 		}
 	}
 
@@ -202,12 +243,22 @@ public class LocusRegistEdit extends Activity{
 	private void ShowEditChar(){
 		mCharNumTxtView.setText(String.valueOf(mCharNum));
 		mMainCharView.setText(getMainChar());
-		mRomaCharView.setText(getRomaChar());
+		if(mCurrentMode==0){
+			mRomaCharView.setText(getRomaChar());
+		}else{
+			mRomaCharView.setText("");
+		}
 	}
 
 	private void SetNextLocusList(){
 		// 登録された軌道の取得
-		mListData = getStringListFromDB(makeSQL_getLocusList());
+		String sqlstr;
+		if(mCurrentMode==0){
+			sqlstr = makeSQL_getLocusList();
+		}else{
+			sqlstr = makeSQL_getMoveList();
+		}
+		mListData = getStringListFromDB(sqlstr);
 		// ListViewの更新
 		updateLocusListView();
 		// EditTextのテキストをクリア
@@ -215,7 +266,13 @@ public class LocusRegistEdit extends Activity{
 	}
 
 	private String getMainChar(){
-		return getStringFromDB(makeSQL_getMainChar());
+		String sqlstr;
+		if(mCurrentMode==0){
+			sqlstr = makeSQL_getMainChar();
+		}else{
+			sqlstr = makeSQL_getMainMove();
+		}
+		return getStringFromDB(sqlstr);
 	}
 
 	private String getRomaChar(){
@@ -290,6 +347,12 @@ public class LocusRegistEdit extends Activity{
 		return rtn;
 	}
 
+	private String makeSQL_getMainMove(){
+		String rtn =  "SELECT mov FROM mov_master_data WHERE mov_no='";
+		rtn += String.valueOf(mCharNum) + "';";
+		return rtn;
+	}
+
 	private String makeSQL_getRomaChar(){
 		String rtn =  "SELECT roma FROM hira_master_table WHERE char_no='";
 		rtn += String.valueOf(mCharNum) + "';";
@@ -302,8 +365,20 @@ public class LocusRegistEdit extends Activity{
 		return rtn;
 	}
 
+	private String makeSQL_getMoveList(){
+		String rtn = "SELECT locul_string FROM mov_data_table WHERE mov_no='";
+		rtn += String.valueOf(mCharNum) + "';";
+		return rtn;
+	}
+
 	private String makeSQL_deleteTargetList(){
 		String rtn = "DELETE FROM char_data_table WHERE char_no='";
+		rtn += String.valueOf(mCharNum) + "';";
+		return rtn;
+	}
+
+	private String makeSQL_deleteTargetList_Move(){
+		String rtn = "DELETE FROM mov_data_table WHERE mov_no='";
 		rtn += String.valueOf(mCharNum) + "';";
 		return rtn;
 	}
@@ -325,6 +400,23 @@ public class LocusRegistEdit extends Activity{
 		return rtn + ";";
 	}
 
+	private String makeSQL_insertLocusList_Move(){
+		int i, cnt;
+		String rtn, item;
+		
+		rtn = "INSERT INTO mov_data_table(locul_string, mov_no, stl_len) VALUES ";
+		cnt = mListData.size();
+
+		for(i=0;i<cnt;i++){
+			if(i>0) rtn += ",";
+			item = (String)mListData.get(i);
+			rtn += "('" + item + "', " + String.valueOf(mCharNum) + " , ";
+			rtn +=  String.valueOf(item.length()) + " )";
+		}
+		
+		return rtn + ";";
+	}
+
 	private String makeSQL_getStartCharNum(){
 		String rtn = "";
 		rtn += "SELECT A.char_no FROM ";
@@ -333,6 +425,17 @@ public class LocusRegistEdit extends Activity{
 		rtn += "(SELECT char_no FROM char_data_table) AS B ";
 		rtn += "ON A.char_no = B.char_no ";
 		rtn += "WHERE B.char_no IS NULL ORDER BY A.char_no; ";
+		return rtn;
+	}
+
+	private String makeSQL_getStartMoveNum(){
+		String rtn = "";
+		rtn += "SELECT A.mov_no FROM ";
+		rtn += "(SELECT mov_no FROM mov_master_data) AS A ";
+		rtn += "LEFT JOIN ";
+		rtn += "(SELECT mov_no FROM mov_data_table) AS B ";
+		rtn += "ON A.mov_no = B.mov_no ";
+		rtn += "WHERE B.mov_no IS NULL ORDER BY A.mov_no; ";
 		return rtn;
 	}
 

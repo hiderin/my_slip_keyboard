@@ -26,7 +26,6 @@
     <string name="locus_regist_edit_label"> 軌道の登録 </string>
 
     <string name="textview">TextView</string>
-    <string name="char_title">軌道の登録 char</string>
     <string name="input_title">軌道</string>
     <string name="prev_txt">＜</string>
     <string name="locus_list">軌道リスト</string>
@@ -38,8 +37,8 @@
     <string name="locus_text">locus_text</string>
 
 	<string-array name="regist_mode_list_str">
-		<item>Sample0</item>
-		<item>Sample1</item>
+		<item>軌道の登録 char</item>
+		<item>移動の登録 move</item>
 	</string-array>
 
 </resources>
