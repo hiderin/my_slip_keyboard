@@ -17,8 +17,7 @@ public class ComposingBuilder {
 
 	// Return Strings
 	private RhText masterText;
-//	private StringBuilder masterbuilder;
-	private StringBuilder mHiraText;
+	private StringBuilder masterString;
 	private StringBuilder mKataText;
 	private StringBuilder mHanKataText;
 	private ArrayList<String> mCandidateList;
@@ -38,6 +37,10 @@ public class ComposingBuilder {
 	private final int rh_hdkt	=0x0020;	// commit handakuten
 	private final int rh_nn		=0x0040;	// commit "ん"
 	private final int rh_next	=0x0080;	// have created nextChar
+	// source kind
+	private final int src_rh	=0x0100;	// RhText
+	private final int src_const	=0x0200;	// Const Text
+	private final int src_locus	=0x0400;	// Locus Text
 	// attrs mask
 
 	private int ListEndPoint=0;
@@ -179,7 +182,6 @@ public class ComposingBuilder {
 		}
 
 		public void BaseAppend(){
-
 			// change to hira from database
 			mydb = hlpr.getWritableDatabase();
 			SQLiteCursor c = (SQLiteCursor)mydb.rawQuery(makeSQLgetHira(rm.toString()),null);
@@ -551,9 +553,8 @@ public class ComposingBuilder {
 		hlpr = new LocusSQLiteOpenHelper(mContext,dbname);
 //		mydb = hlpr.getWritableDatabase();
 
-//		masterbuilder = new StringBuilder();
 		masterText = new RhText();
-		mHiraText = new StringBuilder();
+		masterString = new StringBuilder();
 		mKataText = new StringBuilder();
 		mHanKataText = new StringBuilder();
 		mCandidateList = new ArrayList<String>();
@@ -563,85 +564,67 @@ public class ComposingBuilder {
 
 	// StringBuilder method
 	public void setLength(int newLength){
-//		masterbuilder.setLength(newLength);
 		masterText.setLength(newLength);
 	}
 
 	public int length(){
-//		return masterbuilder.length();
 		return masterText.size();
 	}
 
 	public char charAt(int index){
-//		return masterbuilder.charAt(index);
 		return masterText.charAt(index);
 	}
 
 	public StringBuilder delete(int start, int end){
 		masterText.delete(start, end);
 		return masterText.toStringBuilder();
-//		return masterbuilder.delete(start, end);
 	}
 
 	public void append(char c){
 		masterText.append(c);
 		ListEndPoint=0;
-//		return masterbuilder.append(c);
 	}
 
 	public void append(char[] str){
 		masterText.append(str);
 		ListEndPoint=0;
-//		return masterbuilder.append(str);
 	}
 
 	public void append(CharSequence s){
 		masterText.append(s);
 		ListEndPoint=0;
-//		return masterbuilder.append(s);
 	}
 
 	public void append(StringBuilder sb){
 		masterText.append(sb);
 		ListEndPoint=0;
-//		return masterbuilder.append(sb);
 	}
 
 	public String toString(){
-//		return masterbuilder.toString();
 		return masterText.toString();
 	}
 
 	// output function
 	public StringBuilder me(){
-//		return masterbuilder;
 		return masterText.toStringBuilder();
 	}
 
 	public StringBuilder hira(){
-//		mHiraText.setLength(0);
-//		mHiraText.append(r2h.getHiraText(masterbuilder.toString()));
-//		return mHiraText;
 		return masterText.toStringBuilder();
 	}
 
 	public StringBuilder roma(){
-//		mHiraText.setLength(0);
-//		mHiraText.append(r2h.getHiraText(masterbuilder.toString()));
-//		return mHiraText;
 		return masterText.toRomaStringBuilder();
 	}
 
 	public StringBuilder kata(){
 		mKataText.setLength(0);
-//		mKataText.append(h2k.getKataText(mHiraText.toString(),false));
 		mKataText.append(h2k.getKataText(masterText.toString(),false));
 		return mKataText;
 	}
 
 	public StringBuilder han(){
 		mHanKataText.setLength(0);
-//		mHanKataText.append(h2k.getKataText(mHiraText.toString(),true));
 		mHanKataText.append(h2k.getKataText(masterText.toString(),true));
 		return mHanKataText;
 	}
@@ -652,7 +635,6 @@ public class ComposingBuilder {
 			RhWordList wList = new RhWordList(masterText);
 			wList.MakeList();
 			mCandidateList = wList.getCandidateList();
-	//		mCandidateList.add(masterbuilder.toString());
 			mCandidateList.add(masterText.toString());
 			mCandidateList.add(this.kata().toString());
 			mCandidateList.add(this.han().toString());
