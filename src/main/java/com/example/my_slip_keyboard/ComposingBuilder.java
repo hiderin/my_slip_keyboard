@@ -108,8 +108,8 @@ public class ComposingBuilder {
 		public void MakeList(){
 
 			int i,sp,ep,textsize,endpoint;
-			RhChar rcv1 = new RhChar();
-			RhChar rcv2 = new RhChar();
+			RhText rcv1 = new RhText();
+			RhText rcv2 = new RhText();
 			boolean isFind = false;
 			StringBuilder sql = new StringBuilder();
 
@@ -160,8 +160,8 @@ public class ComposingBuilder {
 
 		private String getFirstString(){
 			int sp,ep,textsize;
-			RhChar rcv1 = new RhChar();
-			RhChar rcv2 = new RhChar();
+			RhText rcv1 = new RhText();
+			RhText rcv2 = new RhText();
 			StringBuilder rtn = new StringBuilder();
 			StringBuilder sql = new StringBuilder();
 

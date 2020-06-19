@@ -7,19 +7,12 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
-//original char class
-public class RhChar{
+//original text class
+public class RhText {
+
+	//original char class
 	public StringBuilder hira;
 	public StringBuilder rm;
-	//constractor
-	public RhChar(){
-		hira= new StringBuilder();
-		rm= new StringBuilder();
-	}
-}
-
-//original text class
-private class RhText extends RhChar{
 
 	// DataBase Access
 	private LocusSQLiteOpenHelper hlpr;
@@ -52,7 +45,8 @@ private class RhText extends RhChar{
 
 	// constractor
 	public RhText(){
-		super();
+		hira= new StringBuilder();
+		rm= new StringBuilder();
 		nextChar=null;
 	}
 
@@ -276,8 +270,8 @@ private class RhText extends RhChar{
 		}
 	}
 
-	public RhChar getHiraWord(int start, int end){
-		RhChar rtn = new RhChar();
+	public RhText getHiraWord(int start, int end){
+		RhText rtn = new RhText();
 		rtn.hira.append(this.subString(start, end));
 		if(end>start){
 			rtn.rm.append(this.getOkuri(end));
