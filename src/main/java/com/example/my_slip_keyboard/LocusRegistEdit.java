@@ -124,14 +124,8 @@ public class LocusRegistEdit extends Activity{
 
 		// 初期表示の設定
 		mCharNum = getIntFromDB(makeSQL_getStartCharNum());
-		if(mCharNum==0){
-			mCurrentMode = 1;
-			mCharNum = getIntFromDB(makeSQL_getStartMoveNum());
-			if(mCharNum==0){
-				mCharNum = 1;
-			}
-		}
-		setLocusEditMode();
+		if(mCharNum==0) mCurrentMode = 1;
+		mModeSpinner.setSelection(mCurrentMode);
     }
 
     @Override
