@@ -65,8 +65,8 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 	private boolean mLocusEdit;
 
 	// 初回起動判定
-    public static final int PREFERENCE_INIT = 1;
-    public static final int PREFERENCE_BOOTED = 0;
+    public static final int PREFERENCE_INIT = 0;
+    public static final int PREFERENCE_BOOTED = 1;
 
     //データ保存
     private void setState(int state) {
