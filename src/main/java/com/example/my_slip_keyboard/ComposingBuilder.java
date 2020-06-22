@@ -108,8 +108,8 @@ public class ComposingBuilder {
 		public void MakeList(){
 
 			int i,sp,ep,textsize,endpoint;
-			RhText rcv1 = new RhText();
-			RhText rcv2 = new RhText();
+			RhText rcv1 = new RhText(mContext);
+			RhText rcv2 = new RhText(mContext);
 			boolean isFind = false;
 			StringBuilder sql = new StringBuilder();
 
@@ -139,7 +139,7 @@ public class ComposingBuilder {
 						if(rcv2.rm.length()>0 && 
 								c.getString(1).indexOf(rcv2.rm.toString())>-1){
 							int isize = rcv1.hira.length();
-							if(masterText.IndexText(ep-1).isOn(rh_hira)){
+							if(masterText.IndexText(ep-1).isHira()){
 								ilist.append(rcv1.hira.substring(isize-1,isize));
 							}
 						}
@@ -160,8 +160,8 @@ public class ComposingBuilder {
 
 		private String getFirstString(){
 			int sp,ep,textsize;
-			RhText rcv1 = new RhText();
-			RhText rcv2 = new RhText();
+			RhText rcv1 = new RhText(mContext);
+			RhText rcv2 = new RhText(mContext);
 			StringBuilder rtn = new StringBuilder();
 			StringBuilder sql = new StringBuilder();
 
@@ -190,7 +190,7 @@ public class ComposingBuilder {
 						if(rcv2.rm.length()>0 && 
 								c.getString(1).indexOf(rcv2.rm.toString())>-1){
 							int isize = rcv1.hira.length();
-							if(masterText.IndexText(ep-1).isOn(rh_hira)){
+							if(masterText.IndexText(ep-1).isHira()){
 								ilist.append(rcv1.hira.substring(isize-1,isize));
 							}
 						}
@@ -218,7 +218,7 @@ public class ComposingBuilder {
 		mContext = context;
 		hlpr = new LocusSQLiteOpenHelper(mContext,dbname);
 
-		masterText = new RhText();
+		masterText = new RhText(context);
 		masterString = new StringBuilder();
 		mKataText = new StringBuilder();
 		mHanKataText = new StringBuilder();

@@ -44,10 +44,12 @@ public class RhText {
 	private int attrs=0;
 
 	// constractor
-	public RhText(){
+	public RhText(Context context){
+		mContext = context;
 		hira= new StringBuilder();
 		rm= new StringBuilder();
 		nextChar=null;
+		hlpr = new LocusSQLiteOpenHelper(context,dbname);
 	}
 
 	// sub function
@@ -89,7 +91,7 @@ public class RhText {
 
 	private void make_nextChar(){
 		if(!isOn(rh_next)){
-			nextChar = new RhText();
+			nextChar = new RhText(mContext);
 			attrs |= rh_next;
 		}
 	}
@@ -271,7 +273,7 @@ public class RhText {
 	}
 
 	public RhText getHiraWord(int start, int end){
-		RhText rtn = new RhText();
+		RhText rtn = new RhText(mContext);
 		rtn.hira.append(this.subString(start, end));
 		if(end>start){
 			rtn.rm.append(this.getOkuri(end));
@@ -335,6 +337,10 @@ public class RhText {
 			return rm.length() == 0;
 		}
 		return true;
+	}
+
+	public boolean isHira(){
+		return isOn(rh_hira);
 	}
 }
 
