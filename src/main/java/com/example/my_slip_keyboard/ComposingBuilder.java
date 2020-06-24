@@ -77,7 +77,7 @@ public class ComposingBuilder {
 			}else{
 				rtn.append("ather");
 			}
-			mydb.close();
+			if(mydb != null) mydb.close();
 			return rtn;
 		}
 
@@ -154,7 +154,7 @@ public class ComposingBuilder {
 				}
 				if(wordlist.size()>0 || ListEndPoint>0) break;
 			}
-			mydb.close();
+			if(mydb != null) mydb.close();
 			wordlist.add(0,getFirstString());
 		}
 
@@ -204,7 +204,7 @@ public class ComposingBuilder {
 					}
 				}
 			}
-			mydb.close();
+			if(mydb != null) mydb.close();
 			return rtn.toString();
 		}
 
@@ -307,7 +307,7 @@ public class ComposingBuilder {
 	}
 
 	public void close(){
-		mydb.close();
+		if(mydb != null) mydb.close();
 	}
 
 	public void RebuildForIndex(int index){
