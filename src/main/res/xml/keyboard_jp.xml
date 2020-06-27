@@ -20,7 +20,7 @@
 		<Key android:codes="45" android:keyLabel="-" android:keyWidth="9.1%p"
 			android:keyEdgeFlags="right"/>
     </Row>
-    
+
     <Row>
 		<Key android:codes="97" android:keyLabel="a" android:keyWidth="12.09%p"
 			android:keyEdgeFlags="left"/>

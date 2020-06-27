@@ -19,7 +19,7 @@
 -->
 
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
-    android:keyWidth="10%p"
+    android:keyWidth="9.09%p"
     android:horizontalGap="0px"
     android:verticalGap="0px"
     android:keyHeight="@dimen/key_height"
@@ -35,11 +35,14 @@
         <Key android:codes="10600" android:keyLabel="練"/>
         <Key android:codes="10700" android:keyLabel="家"/>
         <Key android:codes="10800" android:keyLabel="親"/>
-        <Key android:codes="33,10900" android:keyLabel="!｡" android:keyEdgeFlags="right"/>
+        <Key android:codes="33" android:keyLabel="!" />
+		<Key android:codes="10900" android:keyLabel="｡" android:keyWidth="9.1%p"
+			android:keyEdgeFlags="right"/>
     </Row>
-    
+
     <Row>
-        <Key android:codes="11000" android:keyLabel="今" android:keyEdgeFlags="left"/>
+		<Key android:codes="11000" android:keyLabel="今" android:keyWidth="12.09%p"
+			android:keyEdgeFlags="left"/>
 		<Key android:codes="11100" android:keyLabel="帰"/>
 		<Key android:codes="11200" android:keyLabel="迎"/>
 		<Key android:codes="11300" android:keyLabel="行"/>
@@ -48,33 +51,36 @@
 		<Key android:codes="11600" android:keyLabel="少"/>
 		<Key android:codes="11700" android:keyLabel="遅"/>
 		<Key android:codes="11800" android:keyLabel="感"/>
-        <Key android:codes="11900" android:keyLabel="謝" android:keyEdgeFlags="right"/>
+        <Key android:codes="-5" android:keyIcon="@drawable/sym_keyboard_delete" 
+                android:keyWidth="15.19%p" android:keyEdgeFlags="right"
+                android:isRepeatable="true"/>
     </Row>
     
     <Row>
         <Key android:codes="-1" android:keyIcon="@drawable/sym_keyboard_shift"
-                android:keyWidth="15%p" android:isModifier="true"
+                android:keyWidth="15.04%p" android:isModifier="true"
                 android:isSticky="true" android:keyEdgeFlags="left"/>
-        <Key android:codes="12000" android:keyLabel="疲" />
-        <Key android:codes="12100" android:keyLabel="朝" />
-        <Key android:codes="12200" android:keyLabel="夜" />
-        <Key android:codes="12300" android:keyLabel="了" />
-        <Key android:codes="12400" android:keyLabel="宜" />
-        <Key android:codes="12500" android:keyLabel="願" />
-        <Key android:codes="12600" android:keyLabel="接" />
-        <Key android:codes="-5" android:keyIcon="@drawable/sym_keyboard_delete"
-                android:keyWidth="15%p" android:keyEdgeFlags="right"
-                android:isRepeatable="true"/>
+        <Key android:codes="12000" android:keyLabel="疲" android:keyWidth="9.44%p"/>
+        <Key android:codes="12100" android:keyLabel="朝" android:keyWidth="9.44%p"/>
+        <Key android:codes="12200" android:keyLabel="夜" android:keyWidth="9.44%p"/>
+        <Key android:codes="12300" android:keyLabel="了" android:keyWidth="9.44%p"/>
+        <Key android:codes="12400" android:keyLabel="宜" android:keyWidth="9.44%p"/>
+        <Key android:codes="12500" android:keyLabel="願" android:keyWidth="9.44%p"/>
+        <Key android:codes="12600" android:keyLabel="接" android:keyWidth="9.44%p"/>
+        <Key android:codes="11900" android:keyLabel="謝" android:keyWidth="9.44%p"/>
+		<Key android:codes="11900" android:keyLabel="謝" android:keyWidth="9.44%p"
+			android:keyEdgeFlags="right"/>
     </Row>
     
     <Row android:rowEdgeFlags="bottom">
-        <Key android:codes="21" android:keyLabel="←" 
-                android:keyWidth="20%p" android:keyEdgeFlags="left" />
-        <Key android:codes="-2" android:keyIcon="@drawable/kc_jp" android:keyWidth="15%p" />
-        <Key android:codes="62" android:keyIcon="@drawable/sym_keyboard_space" android:keyWidth="30%p" 
-                android:isRepeatable="true"/>
-        <Key android:codes="8230" android:keyLabel="…" android:keyWidth="15%p" />
-        <Key android:codes="66" android:keyIcon="@drawable/sym_keyboard_return"
-                android:keyWidth="20%p" android:keyEdgeFlags="right" />
+        <Key android:codes="-2" android:keyIcon="@drawable/kc_jp" android:keyWidth="15%p"
+                android:keyEdgeFlags="left"/>
+        <Key android:codes="204" android:keyLabel="☆" android:keyWidth="20%p" />
+        <Key android:codes="62" android:keyIcon="@drawable/sym_keyboard_space" 
+                android:keyWidth="30%p" android:isRepeatable="true"/>
+        <Key android:codes="44" android:keyLabel="、"/>
+		<Key android:codes="46" android:keyLabel="。"/>
+        <Key android:codes="66" android:keyIcon="@drawable/sym_keyboard_return" 
+                android:keyWidth="16.82%p" android:keyEdgeFlags="right"/>
     </Row>
 </Keyboard>
