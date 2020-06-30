@@ -17,7 +17,7 @@
         <Key android:codes="105" android:keyLabel="i"/>
         <Key android:codes="111" android:keyLabel="o"/>
         <Key android:codes="112" android:keyLabel="p"/>
-		<Key android:codes="45" android:keyLabel="-" android:keyWidth="9.1%p"
+		<Key android:codes="64" android:keyLabel="\@" android:keyWidth="9.1%p"
 			android:keyEdgeFlags="right"/>
     </Row>
     
