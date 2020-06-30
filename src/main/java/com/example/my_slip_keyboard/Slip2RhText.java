@@ -16,10 +16,17 @@ public class Slip2RhText {
 	private Context mContext;
 	private final String dbname = "mydict.db";
 
+	// main text data
+	private RhText mRhText;
+	private StringBuilder mSlipText;
+
 	// constractor
 	public Slip2RhText(Context context){
 		mContext = context;
 		hlpr = new LocusSQLiteOpenHelper(context,dbname);
+
+		mRText = new mRhText(context);
+		mSlipText = new StringBuilder();
 	}
 
 }
