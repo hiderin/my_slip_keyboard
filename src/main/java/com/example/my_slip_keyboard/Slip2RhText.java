@@ -22,6 +22,10 @@ public class Slip2RhText {
 	private ArrayList<RhText> mRhTextList;
 	private StringBuilder mSlipText;
 
+	// main text data
+	private RhText mRhText;
+	private StringBuilder mSlipText;
+
 	// constractor
 	public Slip2RhText(Context context){
 		mContext = context;
