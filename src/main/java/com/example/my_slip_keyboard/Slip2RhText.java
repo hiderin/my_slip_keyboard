@@ -68,10 +68,9 @@ public class Slip2RhText {
 	private ArrayList<String> makeRomaTextList(String sliptxt, int idb){
 		int iLenN, i, j, k;
 		ArrayList<int> iLenList = new ArrayList<int>();
-		String sqltxt, stable, basetext, resttext;
+		String sqltxt, basetext, resttext;
 		ArrayList<String> rtn = new ArrayList<String>();
 
-		stable = idb == CHAR_DATA ? "slip_char_table" : "move_char_table";
 		// ループの準備
 		iLenList = getLengthList(sliptxt, idb);
 		iLenN = iLenList.size();
@@ -127,5 +126,8 @@ public class Slip2RhText {
 		mRhText.setLengrh(0);
 	}
 
+	public ArrayList<String> getRomaTextList(){
+		return makeRomaTextList(mSlipText, CHAR_DATA);
+	}
 }
 
