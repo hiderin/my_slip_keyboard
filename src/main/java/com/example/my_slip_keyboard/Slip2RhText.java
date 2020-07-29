@@ -102,8 +102,9 @@ public class Slip2RhText {
 
 			// baseStrListとrestStrLisrの組合せ
 			int baseN, restN;
-			baseN = baseStrList.size() > 0 ? baseStrList.size() : 1;
-			restN = restStrList.size() > 0 ? restStrList.size() : 1;
+			baseN = baseStrList.size();
+			restN = restStrList.size();
+			if(idb == MOVE_DATA) baseN = 1;
 			for(j=0;j<baseN;j++){
 				for(k=0;k<restN;k++){
 					String addText =  baseStrList.size() > 0 ? baseStrList(j) : "";
