@@ -38,12 +38,12 @@ public class Slip2RhText {
 	////////////////////////////////////////////////////////////////////////////////
 	// private method
 
-	// sliptext$B$N@hF,$NJ8;z$rJ8;z%3!<%I$KJQ49(B
+	// sliptextの先頭の文字を文字コードに変換
 	private int getHeadChar2Ascii(String sliptxt){
 		return (int)(sliptxt.toCharArray()[0]);
 	}
 
-	// sliptext$B$NF,J8;z$+$i(BDB$B$K3:Ev$9$kJ8;zNsD9$5$N%j%9%H$r:n@.(B
+	// sliptextの頭文字からDBに該当する文字列長さのリストを作成
 	private ArrayList<int> getLengthList(String sliptxt, int idb){
 		ArrayList<int> rtn = new ArrayList<int>();
 		String sqltxt, stable;
@@ -64,27 +64,27 @@ public class Slip2RhText {
 		return rtn;
 	}
 
-	// sliptext$B$+$i:F5"E*$K(BRomaText$B$r:n@.(B
+	// sliptextから再帰的にRomaTextを作成
 	private ArrayList<String> makeRomaTextList(String sliptxt, int idb){
 		int iLenN, i, j, k;
 		ArrayList<int> iLenList = new ArrayList<int>();
 		String sqltxt, basetext, resttext;
 		ArrayList<String> rtn = new ArrayList<String>();
 
-		// $B%k!<%W$N=`Hw(B
+		// ループの準備
 		iLenList = getLengthList(sliptxt, idb);
 		iLenN = iLenList.size();
 
-		// $B:F5"E*=hM}(B
+		// 再帰的処理
 		for(i=0;i<iLenN;i++){
 			if(iLenList(i) > sliptxt.length()) continue;
-			// $B%j%9%H$N@8@.(B
+			// リストの生成
 			ArrayList<String> baseStrList = new ArrayList<String>();
 			ArrayList<String> restStrLisr = new ArrayList<String>();
-			// sliptxt$B$NJ,3d(B
+			// sliptxtの分割
 			basetext = sliptxt.substring(0, iLenList(i));
 			resttext = sliptxt.supstring(iLenList(i) - 1, sliptxt.length());
-			// baseStrList$B$N<hF@(B
+			// baseStrListの取得
 			if(idb==CHAR_DATA){
 				sqltxt = "SELECT B.roma FROM (SELECT char_no FROM slip_char_table ";
 				sqltxt += "WHERE locus_string = '" + basetext + "') AS A ";
@@ -97,10 +97,10 @@ public class Slip2RhText {
 				}
 				if(mydb != null) mydb.close();
 			}
-			// restStrList$B$N<hF@(B($B<+?H$N4X?t$K(Btext$B$rEjF~(B)
+			// restStrListの取得(自身の関数にtextを投入)
 			restStrList = makeRomaTextList(resttext, idb==CHAR_DATA ? MOVE_DATA : CHAR_DATA);
 
-			// baseStrList$B$H(BrestStrLisr$B$NAH9g$;(B
+			// baseStrListとrestStrLisrの組合せ
 			int baseN, restN;
 			baseN = baseStrList.size();
 			restN = restStrList.size();
