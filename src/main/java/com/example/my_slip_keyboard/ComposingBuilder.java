@@ -9,6 +9,9 @@ import java.util.List;
 
 public class ComposingBuilder {
 
+	// flag int
+	private boolean isSlip;
+
 	// DataBase Access
 	private LocusSQLiteOpenHelper hlpr;
 	private SQLiteDatabase mydb;
@@ -17,7 +20,9 @@ public class ComposingBuilder {
 
 	// Return Strings
 	private RhText masterText;
-	private StringBuilder masterString;
+	private Slip2RhText masterSlipText;
+	private ArrayList<RhText> rhSlipTextList;
+	//private StringBuilder masterString;
 	private StringBuilder mKataText;
 	private StringBuilder mHanKataText;
 	private ArrayList<String> mCandidateList;
@@ -219,11 +224,14 @@ public class ComposingBuilder {
 		hlpr = new LocusSQLiteOpenHelper(mContext,dbname);
 
 		masterText = new RhText(context);
-		masterString = new StringBuilder();
+		masterSlipText = new Slip2RhText(context);
+		rhSlipTextList = new ArrayList<RhText>();
+		//masterString = new StringBuilder();
 		mKataText = new StringBuilder();
 		mHanKataText = new StringBuilder();
 		mCandidateList = new ArrayList<String>();
 		h2k = new Hira2Kata(mContext, mydb);
+		isSlip = false;
 	}
 
 	// StringBuilder method
@@ -268,6 +276,28 @@ public class ComposingBuilder {
 		return masterText.toString();
 	}
 
+	// slip function
+	public void slip_append(char c){
+		masterSlipText.append(c);
+		isSlip = true;
+	}
+
+	private void strlist_to rhlist(){
+		ArrayList<String> romaTextList = masterSlipText.getRomaTextList();
+		int listN = romaTextList.size();
+		int i;
+
+		for(i=0;i<listN;i++){
+			RhText rhtxt = new RhText(mContext);
+			rhSlipTextList.add(rhtxt.AppendString(romaTextList(i)));
+		}
+	}
+
+	public void slip_off(){
+		isSlip = false;
+		rhSlipTextList.clear();
+	}
+
 	// output function
 	public StringBuilder me(){
 		return masterText.toStringBuilder();
@@ -294,14 +324,23 @@ public class ComposingBuilder {
 	}
 
 	public ArrayList<String> getCandidateList(){
+		int i, listN;
+
 		mCandidateList.clear();
-		if(masterText.size()>0){
-			RhWordList wList = new RhWordList(masterText);
-			wList.MakeList();
-			mCandidateList = wList.getCandidateList();
-			mCandidateList.add(masterText.toString());
-			mCandidateList.add(this.kata().toString());
-			mCandidateList.add(this.han().toString());
+		if(!isSlip){
+			rhSlipTextList.add(masterText);
+		}
+		listN = rhSlipTextList.size();
+		
+		for(i=0;i<listN;i++){
+			if(rhSlipTextList.get(i).size()>0){
+				RhWordList wList = new RhWordList(rhSlipTextList.get(i));
+				wList.MakeList();
+				mCandidateList = wList.getCandidateList();
+				mCandidateList.add(masterText.toString());
+				mCandidateList.add(this.kata().toString());
+				mCandidateList.add(this.han().toString());
+			}
 		}
 		return mCandidateList;
 	}

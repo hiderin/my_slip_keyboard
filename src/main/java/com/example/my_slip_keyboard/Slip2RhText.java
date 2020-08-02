@@ -19,11 +19,9 @@ public class Slip2RhText {
 	private final int CHAR_DATA = 1;
 
 	// main text data
-	private ArrayList<RhText> mRhTextList;
 	private StringBuilder mSlipText;
 
 	// main text data
-	private RhText mRhText;
 	private StringBuilder mSlipText;
 
 	// constractor
@@ -31,7 +29,6 @@ public class Slip2RhText {
 		mContext = context;
 		hlpr = new LocusSQLiteOpenHelper(context,dbname);
 
-		mRTextList = new ArrayList<mRhTextList>();
 		mSlipText = new StringBuilder();
 	}
 
@@ -124,7 +121,6 @@ public class Slip2RhText {
 
 	public void clear(){
 		mSlipText.setLength(0);
-		mRhText.setLengrh(0);
 	}
 
 	public ArrayList<String> getRomaTextList(){
