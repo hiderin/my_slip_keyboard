@@ -21,9 +21,6 @@ public class Slip2RhText {
 	// main text data
 	private StringBuilder mSlipText;
 
-	// main text data
-	private StringBuilder mSlipText;
-
 	// constractor
 	public Slip2RhText(Context context){
 		mContext = context;
@@ -41,8 +38,8 @@ public class Slip2RhText {
 	}
 
 	// sliptextの頭文字からDBに該当する文字列長さのリストを作成
-	private ArrayList<int> getLengthList(String sliptxt, int idb){
-		ArrayList<int> rtn = new ArrayList<int>();
+	private ArrayList<Integer> getLengthList(String sliptxt, int idb){
+		ArrayList<Integer> rtn = new ArrayList<Integer>();
 		String sqltxt, stable;
 		int ihcode;
 
@@ -64,7 +61,7 @@ public class Slip2RhText {
 	// sliptextから再帰的にRomaTextを作成
 	private ArrayList<String> makeRomaTextList(String sliptxt, int idb){
 		int iLenN, i, j, k;
-		ArrayList<int> iLenList = new ArrayList<int>();
+		ArrayList<Integer> iLenList = new ArrayList<Integer>();
 		String sqltxt, basetext, resttext;
 		ArrayList<String> rtn = new ArrayList<String>();
 
@@ -74,13 +71,13 @@ public class Slip2RhText {
 
 		// 再帰的処理
 		for(i=0;i<iLenN;i++){
-			if(iLenList(i) > sliptxt.length()) continue;
+			if(iLenList.get(i) > sliptxt.length()) continue;
 			// リストの生成
 			ArrayList<String> baseStrList = new ArrayList<String>();
-			ArrayList<String> restStrLisr = new ArrayList<String>();
+			ArrayList<String> restStrList = new ArrayList<String>();
 			// sliptxtの分割
-			basetext = sliptxt.substring(0, iLenList(i));
-			resttext = sliptxt.supstring(iLenList(i) - 1, sliptxt.length());
+			basetext = sliptxt.substring(0, iLenList.get(i));
+			resttext = sliptxt.substring(iLenList.get(i) - 1, sliptxt.length());
 			// baseStrListの取得
 			if(idb==CHAR_DATA){
 				sqltxt = "SELECT B.roma FROM (SELECT char_no FROM slip_char_table ";
@@ -101,11 +98,12 @@ public class Slip2RhText {
 			int baseN, restN;
 			baseN = baseStrList.size();
 			restN = restStrList.size();
+			String addText;
 			if(idb == MOVE_DATA) baseN = 1;
 			for(j=0;j<baseN;j++){
 				for(k=0;k<restN;k++){
-					String addText =  baseStrList.size() > 0 ? baseStrList(j) : "";
-					String addText += restStrList.size() > 0 ? restStrList(k) : "";
+					addText =  baseStrList.size() > 0 ? baseStrList.get(j) : "";
+					addText += restStrList.size() > 0 ? restStrList.get(k) : "";
 					if(!addText.equals("")) rtn.add(addText);
 				}
 			}
@@ -124,7 +122,7 @@ public class Slip2RhText {
 	}
 
 	public ArrayList<String> getRomaTextList(){
-		return makeRomaTextList(mSlipText, CHAR_DATA);
+		return makeRomaTextList(mSlipText.toString(), CHAR_DATA);
 	}
 }
 

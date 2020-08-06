@@ -185,12 +185,13 @@ public class RhText {
 		}
 	}
 
-	public void AppendString(String stxt){
+	public RhText AppendString(String stxt){
 		int i, ilen;
 		ilen = stxt.length();
 		for(i=0;i<ilen;i++){
 			append(stxt.toCharArray()[i]);
 		}
+		return this;
 	}
 
 	public void NextDelete(){

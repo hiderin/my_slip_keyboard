@@ -289,7 +289,7 @@ public class ComposingBuilder {
 
 		for(i=0;i<listN;i++){
 			RhText rhtxt = new RhText(mContext);
-			rhSlipTextList.add(rhtxt.AppendString(romaTextList(i)));
+			rhSlipTextList.add(rhtxt.AppendString(romaTextList.get(i)));
 		}
 	}
 
