@@ -720,16 +720,30 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 				//commitTyped(ic,mCommitTxt);
 				ic.commitText(mCommitTxt, mCommitTxt.length());
 				mComposingTxt.setLength(0);
-				handleCharacter(mOldKeyCode,null);
+				if(mCurKeyboard==mJpnKeyboard){
+					mComposingTxt.slip_append((char)mOldKeyCode);
+				}else{
+					handleCharacter((char)mOldKeyCode, null);
+				}
 			}
 			mOnKeyThrough++;
-			handleCharacter(primaryCode, null);
+			if(mCurKeyboard==mJpnKeyboard){
+				mComposingTxt.slip_append((char)primaryCode);
+			}else{
+				handleCharacter((char)primaryCode, null);
+			}
 			mOldKeyCode = primaryCode;
 		}
     }
 
     @Override
     public void onRelease(int primaryCode) {
+		if(mCurKeyboard==mJpnKeyboard && !mLocusEdit && mOnKeyThrough>0){
+				//ic.setComposingText(mComposingTxt.hira(), mComposingTxt.length());
+				mCandidateList=mComposingTxt.getCandidateList();
+				updateCandidates(mCandidateList);
+				mCandidateOn = true;
+		}
     }
 
     @Override
