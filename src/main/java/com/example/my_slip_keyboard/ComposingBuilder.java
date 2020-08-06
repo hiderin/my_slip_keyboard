@@ -282,7 +282,7 @@ public class ComposingBuilder {
 		isSlip = true;
 	}
 
-	private void strlist_to rhlist(){
+	private void strlist_to_rhlist(){
 		ArrayList<String> romaTextList = masterSlipText.getRomaTextList();
 		int listN = romaTextList.size();
 		int i;
@@ -330,6 +330,10 @@ public class ComposingBuilder {
 		if(!isSlip){
 			rhSlipTextList.add(masterText);
 		}
+		else{
+			strlist_to_rhlist();
+		}
+
 		listN = rhSlipTextList.size();
 		
 		for(i=0;i<listN;i++){
