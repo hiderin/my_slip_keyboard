@@ -380,7 +380,7 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 					}
 				}
 				else{
-					if(mOnKeyThrough == 0) handleCharacter(primaryCode, keyCodes);
+					if(mOnKeyThrough < 2) handleCharacter(primaryCode, keyCodes);
 				}
                 if(mLocusEdit && mOnKeyThrough > 1){
 					handleEnter();
@@ -728,7 +728,7 @@ public class NewKeyboard extends InputMethodService implements myKeyboardView.On
 			}
 			mOnKeyThrough++;
 			if(mCurKeyboard==mJpnKeyboard){
-				mComposingTxt.slip_append((char)primaryCode);
+				if(mOnKeyThrough > 1) mComposingTxt.slip_append((char)primaryCode);
 			}else{
 				handleCharacter((char)primaryCode, null);
 			}
